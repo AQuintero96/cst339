@@ -1,9 +1,9 @@
-# Activity 1
+# 🤣 Activity 1
 
 - Author: Alex Quintero
 - Date: Sept 12, 2026
 
-## Introduction
+## 🐲 Introduction
 
 - This is **Activity 1** ...
 
