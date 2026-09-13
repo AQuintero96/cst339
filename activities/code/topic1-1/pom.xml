@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- I use Spring Boot 2.7.x to follow the activity guide. -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.18</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.gcu</groupId>
+    <artifactId>topic1-1</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>topic1-1</name>
+    <description>Hello World application for CST-339 Activity 1</description>
+
+    <properties>
+        <!-- I compile my application using Java 17. -->
+        <java.version>17</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- I use Spring Web to serve my application through embedded Tomcat. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- I include Thymeleaf as required by the activity guide. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <!-- I use DevTools to restart my application during development. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- I include testing tools to verify my Spring Boot application. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- I name my packaged application helloworld.jar. -->
+        <finalName>helloworld</finalName>
+
+        <plugins>
+            <!-- I package my application as an executable Spring Boot JAR. -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
