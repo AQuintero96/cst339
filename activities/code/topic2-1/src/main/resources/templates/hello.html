@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Sets the page title shown in the browser tab. -->
+    <title>CST-339 Activity 2 - Hello Spring MVC</title>
+</head>
+<body>
+    <!-- Displays the main message supplied by the controller. -->
+    <h2 th:text="${message}">Greeting goes here</h2>
+
+    <!-- Displays the second message when one is provided. -->
+    <h2 th:if="${message2 != null}" th:text="${message2}">
+        Second greeting goes here
+    </h2>
+
+    <!-- Links to the controller examples using Thymeleaf URL expressions. -->
+    <nav aria-label="MVC examples">
+        <ul>
+            <li>
+                <a th:href="@{/hello/test2}">Test 2: Model</a>
+            </li>
+            <li>
+                <a th:href="@{/hello/test3}">Test 3: ModelAndView</a>
+            </li>
+            <li>
+                <a th:href="@{/hello/test4(message='Hello World from a Thymeleaf template!')}">
+                    Test 4: Request Parameter
+                </a>
+            </li>
+        </ul>
+    </nav>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Common Page Fragments</title>
+</head>
+<body>
+
+    <!-- Shares the application heading, navigation, title, and logo. -->
+    <div th:fragment="header">
+        <h1 class="mt-4">
+            Welcome to my CST-339 Spring Boot Activity Application
+        </h1>
+
+        <nav class="navbar navbar-light bg-light justify-content-center mb-3"
+             aria-label="Main navigation">
+            <a class="btn btn-outline-primary"
+               th:href="@{/login/}">Login Page</a>
+        </nav>
+
+        <h2 th:text="${title}">Page Title</h2>
+
+        <img th:src="@{/images/gcu-logo.png}"
+             alt="Grand Canyon University logo"
+             class="img-fluid my-3"
+             style="max-width: 220px;">
+    </div>
+
+    <!-- Displays the footer text specified in the activity guide. -->
+    <div th:fragment="footer"
+         class="fixed-bottom bg-light text-center py-3">
+        <h5 class="mb-0">Copyright 2020 Grand Canyon University</h5>
+    </div>
+
+</body>
+</html>
