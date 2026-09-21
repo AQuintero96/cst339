@@ -1,31 +1,52 @@
 # Welcome to CST-339: Programming in Java III
 
-My name is Alex Quintero, and this repository contains my activities and milestones for CST-339. Throughout this course, I’m building on my Java experience by learning how to create web applications with Spring Boot. Maven is used to manage dependencies and build applications, GitHub tracks the work, and Markdown documents the results.
+My name is Alex Quintero, and this repository contains my activities and milestones for CST-339. The coursework builds on my Java experience through web development with Spring Boot, Maven, and Thymeleaf. GitHub tracks the work, and Markdown documents each assignment.
 
-Activities and milestones are organized as separate categories. Each assignment has its own report, while related assignments build on earlier work as directed by the course requirements.
+Activities and milestones are organized separately. Related assignments build on earlier work as directed by the course requirements. All milestones are completed individually.
 
 ## Activities
 
-### Activity 2: Spring MVC — Latest Activity
+### Activity 2: Spring MVC
 
-[View Activity 2: Spring MVC](activities/activity2/README.md)
+**Latest activity**
 
-This activity explored Spring MVC controllers, model attributes, request parameters, and Thymeleaf views. A second application introduced form submission, input validation, and an orders table, followed by a shared layout with reusable header and footer fragments. Both applications were built with Maven and tested as executable JAR files from PowerShell.
+[View Activity 2](activities/activity2/README.md)
 
-The report includes screenshots, research answers comparing MVC frameworks, a Mermaid diagram of the login request flow, and a conclusion.
+This activity covered controllers, model attributes, request parameters, and Thymeleaf views. It also included a login form, input validation, an orders table, and a shared page layout.
+
+Both applications were built with Maven and run as executable JAR files from PowerShell. The report includes screenshots, research answers, and a Mermaid diagram showing the login request flow.
 
 ### Activity 1: Tools Installation, Validation, and Learning Maven
 
-[View Activity 1: Tools Installation, Validation, and Learning Maven](activities/activity1/README.md)
+[View Activity 1](activities/activity1/README.md)
 
-This activity established the development environment using Eclipse with Spring Tools and Java 17. A Hello World application was created and packaged as an executable JAR using Maven. The report includes screenshots of the application running in Eclipse and from PowerShell, along with answers to the research questions.
+This activity focused on setting up Eclipse with Spring Tools and Java 17, creating a Hello World application, and building an executable JAR with Maven.
+
+The report includes screenshots of the application running in Eclipse and PowerShell, along with answers to the research questions.
 
 ## Milestones
 
-### Milestone 1: IT Parts Inventory Manager
+### IT Parts Inventory Manager
 
-[View Milestone 1: Project Proposal and Initial Design](milestones/milestone1/README.md)
+The course project is a computer parts inventory application based on my work in IT. The finished application will track spare components, quantities, unit costs, and storage locations. Each milestone builds on the same application.
 
-The course project is a computer parts inventory application that connects to my work in IT. The planned application will help track spare components, their quantities, costs, and storage locations.
+[View Application Source Code](milestones/code/it-parts-inventory/)
 
-Milestone 1 introduces the project proposal, planned features, solo work plan, technical approach, risks, and sitemap. This report establishes the initial design for the application, which will be developed throughout the remaining milestones.
+### Project Progress
+
+| Milestone | Focus | Report |
+| --- | --- | --- |
+| 1 | Project proposal, planned features, solo work plan, risks, and initial design | [Milestone 1](milestones/milestone1/README.md) |
+| 2 | Home page, registration, validation, simulated login, and responsive layouts | [Milestone 2](milestones/milestone2/README.md) |
+
+### Latest Update: Milestone 2
+
+The application now includes a home page, registration, simulated login, an inventory landing page, and logout. Forms display messages when information needs to be corrected, and navigation changes when a user logs in or out.
+
+The pages use a shared Thymeleaf layout with Bootstrap and custom CSS. Layout checks covered Opera GX, Microsoft Edge, a physical iPhone 16 Pro Max using Chrome, and iPad Pro 13 emulation in Edge DevTools.
+
+Accounts are temporarily stored in memory. Database storage and full inventory management will be added in later milestones.
+
+- [Design Report and Screenshots](milestones/milestone2/README.md)
+- [Video Demonstration](https://youtu.be/LT1w99JllCw)
+- [Draft Database Script](milestones/milestone2/database/schema-draft.sql)

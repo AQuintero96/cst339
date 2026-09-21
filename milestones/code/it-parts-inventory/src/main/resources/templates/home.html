@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <meta charset="UTF-8">
+    <title>Home | IT Parts Inventory Manager</title>
+</head>
+<body>
+
+    <div layout:fragment="content">
+        <!-- Introduces the application and its primary entry points. -->
+        <section class="hero">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-7">
+                        <p class="eyebrow">Built for everyday IT work</p>
+
+                        <h1>IT Parts Inventory Manager</h1>
+
+                        <p class="hero-description">
+                            A central place for the spare computer parts
+                            that keep repairs and upgrades moving.
+                        </p>
+
+                        <p class="hero-detail">
+                            Organize component information, stock quantities,
+                            unit costs, and storage locations in one application.
+                        </p>
+
+                        <div class="d-flex flex-wrap gap-3 mt-4">
+                            <a class="btn btn-accent btn-lg"
+                               th:href="@{/register}">
+                                Create an Account
+                            </a>
+
+                            <a class="btn btn-outline-light btn-lg"
+                               th:href="@{/login}">
+                                Log In
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <!-- Describes the inventory domain without showing invented totals. -->
+                        <aside class="inventory-preview"
+                               aria-labelledby="inventory-preview-title">
+                            <p class="preview-label">Inventory at a glance</p>
+                            <h2 id="inventory-preview-title">
+                                The right details for each part
+                            </h2>
+
+                            <ul class="preview-list">
+                                <li>
+                                    <span>Component</span>
+                                    <strong>Category, manufacturer, and model</strong>
+                                </li>
+                                <li>
+                                    <span>Availability</span>
+                                    <strong>Quantity on hand</strong>
+                                </li>
+                                <li>
+                                    <span>Cost</span>
+                                    <strong>Unit cost in USD</strong>
+                                </li>
+                                <li>
+                                    <span>Location</span>
+                                    <strong>Room, cabinet, or shelf</strong>
+                                </li>
+                            </ul>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summarizes the component categories established in the proposal. -->
+        <section class="container section-spacing"
+                 aria-labelledby="components-heading">
+            <div class="section-heading">
+                <p class="eyebrow">Computer components</p>
+                <h2 id="components-heading">An inventory built around IT parts</h2>
+                <p>
+                    From replacement memory to power supplies, keep component
+                    records organized using consistent information.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <article class="feature-card">
+                        <span class="category-label">Memory and storage</span>
+                        <h3>RAM, SSDs, and hard drives</h3>
+                        <p>
+                            Identify spare memory and storage components by
+                            manufacturer and model.
+                        </p>
+                    </article>
+                </div>
+
+                <div class="col-md-4">
+                    <article class="feature-card">
+                        <span class="category-label">Core components</span>
+                        <h3>Processors and motherboards</h3>
+                        <p>
+                            Keep identifying details and notes together for
+                            the components at the center of a computer.
+                        </p>
+                    </article>
+                </div>
+
+                <div class="col-md-4">
+                    <article class="feature-card">
+                        <span class="category-label">Supporting hardware</span>
+                        <h3>Graphics, power, and cooling</h3>
+                        <p>
+                            Organize graphics cards, power supplies, and cooling
+                            components alongside the rest of the inventory.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>

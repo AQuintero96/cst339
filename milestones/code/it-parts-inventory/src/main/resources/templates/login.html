@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <meta charset="UTF-8">
+    <title>Log In | IT Parts Inventory Manager</title>
+</head>
+<body>
+
+    <div layout:fragment="content">
+        <section class="container py-5" aria-labelledby="login-heading">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+
+                    <p class="eyebrow">Welcome back</p>
+                    <h1 id="login-heading">Log In</h1>
+                    <p class="text-secondary mb-4">
+                        Enter your username and password to continue.
+                    </p>
+
+                    <!-- Displays registration and logout confirmations. -->
+                    <div th:if="${successMessage != null}"
+                         class="alert alert-success"
+                         role="status"
+                         th:text="${successMessage}">
+                        Confirmation message
+                    </div>
+
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4 p-md-5">
+                            <form th:action="@{/login}"
+                                  th:object="${loginModel}"
+                                  method="post"
+                                  novalidate>
+
+                                <!-- Displays errors involving the credential pair. -->
+                                <div th:if="${#fields.hasGlobalErrors()}"
+                                     class="alert alert-danger"
+                                     role="alert">
+                                    <p th:each="error : ${#fields.globalErrors()}"
+                                       th:text="${error}"
+                                       class="mb-0">
+                                        Login error
+                                    </p>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">
+                                        Username
+                                    </label>
+                                    <input type="text"
+                                           id="username"
+                                           class="form-control"
+                                           th:field="*{username}"
+                                           th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''"
+                                           autocomplete="username"
+                                           aria-describedby="usernameError"
+                                           required>
+                                    <div id="usernameError"
+                                         class="invalid-feedback"
+                                         th:errors="*{username}">
+                                        Username error
+                                    </div>
+                                </div>
+
+                                <!-- Does not repopulate the password after a failed login. -->
+                                <div class="mb-4">
+                                    <label for="password" class="form-label">
+                                        Password
+                                    </label>
+                                    <input type="password"
+                                           id="password"
+                                           name="password"
+                                           class="form-control"
+                                           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                                           autocomplete="current-password"
+                                           aria-describedby="passwordError"
+                                           required>
+                                    <div id="passwordError"
+                                         class="invalid-feedback"
+                                         th:errors="*{password}">
+                                        Password error
+                                    </div>
+                                </div>
+
+                                <button type="submit"
+                                        class="btn btn-accent w-100">
+                                    Log In
+                                </button>
+
+                                <p class="mt-4 mb-0">
+                                    Need an account?
+                                    <a th:href="@{/register}">Register here</a>.
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>

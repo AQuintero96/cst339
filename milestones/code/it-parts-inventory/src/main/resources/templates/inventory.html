@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory | IT Parts Inventory Manager</title>
+</head>
+<body>
+
+    <div layout:fragment="content">
+        <section class="container py-5" aria-labelledby="inventory-heading">
+            <p class="eyebrow">Computer components</p>
+            <h1 id="inventory-heading">Parts Inventory</h1>
+
+            <!-- Personalizes the page when a simulated login session exists. -->
+            <p th:if="${session.currentUser != null}"
+               th:text="${'Welcome, ' + session.currentUser.firstName + '.'}"
+               class="text-secondary">
+                Welcome.
+            </p>
+
+            <p th:if="${session.currentUser == null}"
+               class="text-secondary">
+                Welcome to the parts inventory.
+                <a th:href="@{/login}">Log in</a> to start your session.
+            </p>
+
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body p-4">
+                    <h2 class="h4">Inventory Overview</h2>
+                    <p class="text-secondary">
+                        Part records will organize component names, categories,
+                        manufacturers, models, quantities, unit costs, and
+                        storage locations.
+                    </p>
+
+                    <!-- Establishes the product area without inventing inventory records. -->
+                    <div class="border rounded p-4 text-center bg-light">
+                        <h3 class="h5">No inventory records to display</h3>
+                        <p class="text-secondary mb-0">
+                            Part entry and inventory management will be added
+                            as the application develops.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <meta charset="UTF-8">
+    <title>Create an Account | IT Parts Inventory Manager</title>
+</head>
+<body>
+
+    <div layout:fragment="content">
+        <section class="container py-5"
+                 aria-labelledby="registration-heading">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-xl-7">
+
+                    <p class="eyebrow">Get started</p>
+                    <h1 id="registration-heading">Create an Account</h1>
+                    <p class="text-secondary mb-4">
+                        Enter your details to register for IT Parts Inventory
+                        Manager. All fields are required.
+                    </p>
+
+                    <!-- Displays the result of the current validation step. -->
+                    <div th:if="${validationMessage != null}"
+                         class="alert alert-success"
+                         role="status"
+                         th:text="${validationMessage}">
+                        Registration validation result
+                    </div>
+
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4 p-md-5">
+
+                            <!-- Server validation provides consistent field messages. -->
+                            <form th:action="@{/register}"
+                                  th:object="${userModel}"
+                                  method="post"
+                                  novalidate>
+
+                                <div th:if="${#fields.hasErrors('*')}"
+                                     class="alert alert-danger"
+                                     role="alert">
+                                    Please correct the highlighted fields and
+                                    enter both password fields again.
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="firstName" class="form-label">
+                                            First Name
+                                        </label>
+                                        <input type="text"
+                                               id="firstName"
+                                               class="form-control"
+                                               th:field="*{firstName}"
+                                               th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''"
+                                               autocomplete="given-name"
+                                               aria-describedby="firstNameError"
+                                               required>
+                                        <div id="firstNameError"
+                                             class="invalid-feedback"
+                                             th:errors="*{firstName}">
+                                            First name error
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="lastName" class="form-label">
+                                            Last Name
+                                        </label>
+                                        <input type="text"
+                                               id="lastName"
+                                               class="form-control"
+                                               th:field="*{lastName}"
+                                               th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''"
+                                               autocomplete="family-name"
+                                               aria-describedby="lastNameError"
+                                               required>
+                                        <div id="lastNameError"
+                                             class="invalid-feedback"
+                                             th:errors="*{lastName}">
+                                            Last name error
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">
+                                            Email Address
+                                        </label>
+                                        <input type="email"
+                                               id="email"
+                                               class="form-control"
+                                               th:field="*{email}"
+                                               th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                               autocomplete="email"
+                                               aria-describedby="emailError"
+                                               required>
+                                        <div id="emailError"
+                                             class="invalid-feedback"
+                                             th:errors="*{email}">
+                                            Email address error
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="phoneNumber" class="form-label">
+                                            Phone Number
+                                        </label>
+                                        <input type="tel"
+                                               id="phoneNumber"
+                                               class="form-control"
+                                               th:field="*{phoneNumber}"
+                                               th:classappend="${#fields.hasErrors('phoneNumber')} ? 'is-invalid' : ''"
+                                               autocomplete="tel-national"
+                                               inputmode="numeric"
+                                               aria-describedby="phoneHelp phoneError"
+                                               required>
+                                        <div id="phoneHelp" class="form-text">
+                                            Enter 10 digits without spaces or
+                                            punctuation, such as 2025550147.
+                                        </div>
+                                        <div id="phoneError"
+                                             class="invalid-feedback"
+                                             th:errors="*{phoneNumber}">
+                                            Phone number error
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="username" class="form-label">
+                                            Username
+                                        </label>
+                                        <input type="text"
+                                               id="username"
+                                               class="form-control"
+                                               th:field="*{username}"
+                                               th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''"
+                                               autocomplete="username"
+                                               aria-describedby="usernameHelp usernameError"
+                                               required>
+                                        <div id="usernameHelp" class="form-text">
+                                            Use 3 to 32 letters, numbers, or
+                                            underscores.
+                                        </div>
+                                        <div id="usernameError"
+                                             class="invalid-feedback"
+                                             th:errors="*{username}">
+                                            Username error
+                                        </div>
+                                    </div>
+
+                                    <!-- Password values are not written back into the HTML. -->
+                                    <div class="col-md-6">
+                                        <label for="password" class="form-label">
+                                            Password
+                                        </label>
+                                        <input type="password"
+                                               id="password"
+                                               name="password"
+                                               class="form-control"
+                                               th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                                               autocomplete="new-password"
+                                               aria-describedby="passwordHelp passwordError"
+                                               required>
+                                        <div id="passwordHelp" class="form-text">
+                                            Use 8 to 64 characters.
+                                        </div>
+                                        <div id="passwordError"
+                                             class="invalid-feedback"
+                                             th:errors="*{password}">
+                                            Password error
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="confirmPassword"
+                                               class="form-label">
+                                            Confirm Password
+                                        </label>
+                                        <input type="password"
+                                               id="confirmPassword"
+                                               name="confirmPassword"
+                                               class="form-control"
+                                               th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''"
+                                               autocomplete="new-password"
+                                               aria-describedby="confirmPasswordHelp confirmPasswordError"
+                                               required>
+                                        <div id="confirmPasswordHelp"
+                                             class="form-text">
+                                            Enter the same password again.
+                                        </div>
+                                        <div id="confirmPasswordError"
+                                             class="invalid-feedback"
+                                             th:errors="*{confirmPassword}">
+                                            Password confirmation error
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-wrap gap-3 mt-4">
+                                    <button type="submit" class="btn btn-accent">
+                                        Create Account
+                                    </button>
+                                    <a th:href="@{/}"
+                                       class="btn btn-outline-secondary">
+                                        Cancel
+                                    </a>
+                                </div>
+
+                                <p class="mt-4 mb-0">
+                                    Already have an account?
+                                    <a th:href="@{/login}">Log in</a>.
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>

@@ -254,4 +254,4 @@ Both projects built successfully with Maven and ran as executable JAR files outs
 - [Spring Framework: DispatcherServlet](https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-servlet.html).
 - [Spring Guide: Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content).
 - [Ruby on Rails: Getting Started](https://guides.rubyonrails.org/getting_started.html).
-- [Django: General FAQ — MVC and MTV](https://docs.djangoproject.com/en/dev/faq/general/).
+- [Django: General FAQ - MVC and MTV](https://docs.djangoproject.com/en/dev/faq/general/).
