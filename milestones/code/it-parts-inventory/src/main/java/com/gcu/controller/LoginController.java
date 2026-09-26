@@ -14,25 +14,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gcu.business.AccountService;
+import com.gcu.business.AccountServiceInterface;
 import com.gcu.model.LoginModel;
 import com.gcu.model.SessionUser;
 
 /**
- * Coordinates simulated login, the inventory landing page, and logout.
- * Spring Security page protection will be added in its scheduled milestone.
+ * Handles simulated login and logout using an injected account service.
  */
 @Controller
 public class LoginController {
 
-    private final AccountService accountService;
+    private final AccountServiceInterface accountService;
 
     /**
-     * Supplies the temporary account service.
+     * Supplies the account service through constructor injection.
      *
      * @param accountService the service used to check credentials
      */
-    public LoginController(AccountService accountService) {
+    public LoginController(AccountServiceInterface accountService) {
         this.accountService = accountService;
     }
 
@@ -50,7 +49,7 @@ public class LoginController {
     }
 
     /**
-     * Validates credentials and establishes the simulated logged-in state.
+     * Validates credentials and establishes the logged-in session.
      *
      * @param loginModel the submitted credentials
      * @param bindingResult the binding and validation results
@@ -84,6 +83,7 @@ public class LoginController {
 
         // Starts a fresh session after successful credential checking.
         HttpSession previousSession = request.getSession(false);
+
         if (previousSession != null) {
             previousSession.invalidate();
         }
@@ -93,7 +93,7 @@ public class LoginController {
     }
 
     /**
-     * Displays the initial inventory landing page.
+     * Displays the inventory landing page.
      *
      * @param model the data supplied to the view
      * @return the inventory template
@@ -105,11 +105,11 @@ public class LoginController {
     }
 
     /**
-     * Ends the simulated login session.
+     * Ends the current login session.
      *
      * @param request the current HTTP request
      * @param redirectAttributes the logout confirmation message
-     * @return a redirect to the login page
+     * @return a redirect to login
      */
     @PostMapping("/logout")
     public String logout(

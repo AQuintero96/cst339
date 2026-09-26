@@ -14,7 +14,7 @@
             <p class="eyebrow">Computer components</p>
             <h1 id="inventory-heading">Parts Inventory</h1>
 
-            <!-- Personalizes the page when a simulated login session exists. -->
+            <!-- Personalizes the page when a login session exists. -->
             <p th:if="${session.currentUser != null}"
                th:text="${'Welcome, ' + session.currentUser.firstName + '.'}"
                class="text-secondary">
@@ -29,19 +29,27 @@
 
             <div class="card border-0 shadow-sm mt-4">
                 <div class="card-body p-4">
-                    <h2 class="h4">Inventory Overview</h2>
+                    <div class="d-flex flex-wrap justify-content-between
+                                align-items-center gap-3 mb-3">
+                        <h2 class="h4 mb-0">Inventory Overview</h2>
+                        <a class="btn btn-accent" th:href="@{/parts/new}">
+                            Add Part
+                        </a>
+                    </div>
+
                     <p class="text-secondary">
-                        Part records will organize component names, categories,
-                        manufacturers, models, quantities, unit costs, and
-                        storage locations.
+                        Enter a component's name, category, manufacturer,
+                        model, quantity, unit cost, and storage location
+                        using the Add Part form.
                     </p>
 
-                    <!-- Establishes the product area without inventing inventory records. -->
+                    <!-- Explains why accepted submissions do not appear in a list. -->
                     <div class="border rounded p-4 text-center bg-light">
-                        <h3 class="h5">No inventory records to display</h3>
+                        <h3 class="h5">No saved inventory records</h3>
                         <p class="text-secondary mb-0">
-                            Part entry and inventory management will be added
-                            as the application develops.
+                            You can submit part information and review its
+                            details on the confirmation page. Part records
+                            are not saved in this version.
                         </p>
                     </div>
                 </div>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <meta charset="UTF-8">
+    <title>Part Created | IT Parts Inventory Manager</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="container py-5" aria-labelledby="confirmation-heading">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <p class="eyebrow">Computer components</p>
+                <h1 id="confirmation-heading">Part Created</h1>
+
+                <div class="alert alert-success" role="status">
+                    The part information was accepted successfully.
+                </div>
+
+                <!-- Shows the submitted result without implying database storage. -->
+                <p class="text-secondary">
+                    This demonstration does not retain part records.
+                    Review the submitted information below.
+                </p>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Temporary Part ID</dt>
+                            <dd class="col-sm-8"
+                                th:text="${createdPart.partId}"></dd>
+
+                            <dt class="col-sm-4">Part Name</dt>
+                            <dd class="col-sm-8 text-break"
+                                th:text="${createdPart.partName}"></dd>
+
+                            <dt class="col-sm-4">Category</dt>
+                            <dd class="col-sm-8"
+                                th:text="${createdPart.category}"></dd>
+
+                            <dt class="col-sm-4">Manufacturer</dt>
+                            <dd class="col-sm-8 text-break"
+                                th:text="${createdPart.manufacturer}"></dd>
+
+                            <dt class="col-sm-4">Model</dt>
+                            <dd class="col-sm-8 text-break"
+                                th:text="${createdPart.model}"></dd>
+
+                            <dt class="col-sm-4">Quantity</dt>
+                            <dd class="col-sm-8"
+                                th:text="${createdPart.quantity}"></dd>
+
+                            <dt class="col-sm-4">Unit Cost (USD)</dt>
+                            <dd class="col-sm-8"
+                                th:text="${#numbers.formatDecimal(createdPart.unitCost, 1, 2)}"></dd>
+
+                            <dt class="col-sm-4">Storage Location</dt>
+                            <dd class="col-sm-8 text-break"
+                                th:text="${createdPart.storageLocation}"></dd>
+
+                            <dt class="col-sm-4">Description</dt>
+                            <dd class="col-sm-8 text-break"
+                                th:text="${#strings.isEmpty(createdPart.description) ? 'None provided' : createdPart.description}"></dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-3 mt-4">
+                    <a th:href="@{/parts/new}" class="btn btn-accent">
+                        Add Another Part
+                    </a>
+                    <a th:href="@{/inventory}"
+                       class="btn btn-outline-secondary">
+                        Return to Inventory
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

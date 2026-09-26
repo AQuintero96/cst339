@@ -3,10 +3,11 @@ package com.gcu.business;
 import org.springframework.stereotype.Service;
 
 /**
- * Provides registration checks outside the web controller.
+ * Implements the registration password confirmation check.
  */
 @Service
-public class RegistrationService {
+public class RegistrationService
+        implements RegistrationServiceInterface {
 
     /**
      * Checks whether the password and confirmation match.
@@ -15,6 +16,7 @@ public class RegistrationService {
      * @param confirmPassword the repeated password
      * @return true when both values are present and equal
      */
+    @Override
     public boolean passwordsMatch(String password, String confirmPassword) {
         return password != null
                 && confirmPassword != null

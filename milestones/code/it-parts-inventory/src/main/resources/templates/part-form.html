@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Part | IT Parts Inventory Manager</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="container py-5" aria-labelledby="part-heading">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <p class="eyebrow">Computer components</p>
+                <h1 id="part-heading">Add Part</h1>
+                <p class="text-secondary">
+                    Enter the component details below.
+                    All fields except Description are required.
+                </p>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+                        <!-- Server validation checks all submitted values. -->
+                        <form th:action="@{/parts}"
+                              th:object="${partModel}"
+                              method="post"
+                              novalidate>
+
+                            <div th:if="${#fields.hasErrors('*')}"
+                                 class="alert alert-danger"
+                                 role="alert">
+                                Please correct the highlighted fields.
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="partName" class="form-label">
+                                        Part Name
+                                    </label>
+                                    <input id="partName" type="text"
+                                           class="form-control"
+                                           th:field="*{partName}"
+                                           th:classappend="${#fields.hasErrors('partName')} ? 'is-invalid' : ''"
+                                           aria-describedby="partNameError"
+                                           required>
+                                    <div id="partNameError"
+                                         class="invalid-feedback"
+                                         th:errors="*{partName}"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="category" class="form-label">
+                                        Category
+                                    </label>
+                                    <select id="category"
+                                            class="form-select"
+                                            th:field="*{category}"
+                                            th:classappend="${#fields.hasErrors('category')} ? 'is-invalid' : ''"
+                                            aria-describedby="categoryError"
+                                            required>
+                                        <option value="">Select a category</option>
+                                        <option th:each="item : ${categories}"
+                                                th:value="${item}"
+                                                th:text="${item}"></option>
+                                    </select>
+                                    <div id="categoryError"
+                                         class="invalid-feedback"
+                                         th:errors="*{category}"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="manufacturer" class="form-label">
+                                        Manufacturer
+                                    </label>
+                                    <input id="manufacturer" type="text"
+                                           class="form-control"
+                                           th:field="*{manufacturer}"
+                                           th:classappend="${#fields.hasErrors('manufacturer')} ? 'is-invalid' : ''"
+                                           aria-describedby="manufacturerError"
+                                           required>
+                                    <div id="manufacturerError"
+                                         class="invalid-feedback"
+                                         th:errors="*{manufacturer}"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="model" class="form-label">
+                                        Model
+                                    </label>
+                                    <input id="model" type="text"
+                                           class="form-control"
+                                           th:field="*{model}"
+                                           th:classappend="${#fields.hasErrors('model')} ? 'is-invalid' : ''"
+                                           aria-describedby="modelError"
+                                           required>
+                                    <div id="modelError"
+                                         class="invalid-feedback"
+                                         th:errors="*{model}"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="quantity" class="form-label">
+                                        Quantity
+                                    </label>
+                                    <input id="quantity" type="text"
+                                           inputmode="numeric"
+                                           class="form-control"
+                                           th:field="*{quantity}"
+                                           th:classappend="${#fields.hasErrors('quantity')} ? 'is-invalid' : ''"
+                                           aria-describedby="quantityHelp quantityError"
+                                           required>
+                                    <div id="quantityHelp" class="form-text">
+                                        Enter a whole number, zero or greater.
+                                    </div>
+                                    <div id="quantityError"
+                                         class="invalid-feedback"
+                                         th:errors="*{quantity}"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="unitCost" class="form-label">
+                                        Unit Cost (USD)
+                                    </label>
+                                    <input id="unitCost" type="text"
+                                           inputmode="decimal"
+                                           class="form-control"
+                                           th:field="*{unitCost}"
+                                           th:classappend="${#fields.hasErrors('unitCost')} ? 'is-invalid' : ''"
+                                           aria-describedby="costHelp costError"
+                                           required>
+                                    <div id="costHelp" class="form-text">
+                                        Enter a nonnegative amount with up to
+                                        two decimal places, such as 49.99.
+                                    </div>
+                                    <div id="costError"
+                                         class="invalid-feedback"
+                                         th:errors="*{unitCost}"></div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="storageLocation" class="form-label">
+                                        Storage Location
+                                    </label>
+                                    <input id="storageLocation" type="text"
+                                           class="form-control"
+                                           th:field="*{storageLocation}"
+                                           th:classappend="${#fields.hasErrors('storageLocation')} ? 'is-invalid' : ''"
+                                           aria-describedby="locationError"
+                                           required>
+                                    <div id="locationError"
+                                         class="invalid-feedback"
+                                         th:errors="*{storageLocation}"></div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="description" class="form-label">
+                                        Description (Optional)
+                                    </label>
+                                    <textarea id="description"
+                                              rows="3"
+                                              class="form-control"
+                                              th:field="*{description}"
+                                              th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
+                                              aria-describedby="descriptionHelp descriptionError"></textarea>
+                                    <div id="descriptionHelp" class="form-text">
+                                        Maximum 1,000 characters.
+                                    </div>
+                                    <div id="descriptionError"
+                                         class="invalid-feedback"
+                                         th:errors="*{description}"></div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-3 mt-4">
+                                <button type="submit" class="btn btn-accent">
+                                    Create Part
+                                </button>
+                                <a th:href="@{/inventory}"
+                                   class="btn btn-outline-secondary">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

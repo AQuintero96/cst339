@@ -18,11 +18,11 @@ import com.gcu.model.SessionUser;
 import com.gcu.model.UserModel;
 
 /**
- * Provides temporary account storage for the Milestone 2 demonstration.
+ * Implements account operations using temporary in-memory storage.
  * Accounts are discarded when the application restarts.
  */
 @Service
-public class AccountService {
+public class AccountService implements AccountServiceInterface {
 
     private static final int SALT_LENGTH = 16;
     private static final int HASH_LENGTH = 256;
@@ -37,8 +37,9 @@ public class AccountService {
      * Registers a validated user when the username is available.
      *
      * @param user the validated registration form
-     * @return true when the account is created, or false for a duplicate username
+     * @return true when created, or false for a duplicate username
      */
+    @Override
     public boolean register(UserModel user) {
         String key = normalizeUsername(user.getUsername());
 
@@ -60,17 +61,18 @@ public class AccountService {
                 salt,
                 passwordHash);
 
-        // Prevents two requests from registering the same username.
+        // Prevents concurrent requests from creating the same username.
         return accounts.putIfAbsent(key, account) == null;
     }
 
     /**
-     * Checks submitted credentials against the temporary account records.
+     * Checks credentials against the temporary account records.
      *
      * @param username the submitted username
      * @param password the submitted password
-     * @return the session user when credentials match, otherwise an empty result
+     * @return the session user when credentials match
      */
+    @Override
     public Optional<SessionUser> authenticate(
             String username, String password) {
 
@@ -100,7 +102,7 @@ public class AccountService {
     }
 
     /**
-     * Creates a consistent lookup key for case-insensitive usernames.
+     * Creates a consistent key for case-insensitive username lookup.
      *
      * @param username the submitted username
      * @return the normalized username
@@ -110,10 +112,10 @@ public class AccountService {
     }
 
     /**
-     * Derives a salted password hash without retaining the original password.
+     * Creates a salted password hash.
      *
-     * @param password the password to process
-     * @param salt the account's randomly generated salt
+     * @param password the submitted password
+     * @param salt the account's random salt
      * @return the derived password hash
      */
     private byte[] hashPassword(String password, byte[] salt) {
@@ -140,7 +142,7 @@ public class AccountService {
     }
 
     /**
-     * Stores account details privately within the temporary account service.
+     * Stores registration details and hashed credentials in memory.
      * Password confirmation and plaintext passwords are not retained.
      */
     private static final class AccountRecord {
@@ -154,7 +156,7 @@ public class AccountService {
         private final byte[] passwordHash;
 
         /**
-         * Creates a temporary account record from validated registration data.
+         * Creates a temporary account record.
          *
          * @param firstName the registered first name
          * @param lastName the registered last name

@@ -1,28 +1,35 @@
 # Welcome to CST-339: Programming in Java III
 
-My name is Alex Quintero, and this repository contains my activities and milestones for CST-339. The coursework builds on my Java experience through web development with Spring Boot, Maven, and Thymeleaf. GitHub tracks the work, and Markdown documents each assignment.
+My name is Alex Quintero, and this repository contains my activities and milestones for CST-339. The coursework builds on my Java experience through web development with Spring Boot, Maven, and Thymeleaf.
 
 Activities and milestones are organized separately. Related assignments build on earlier work as directed by the course requirements. All milestones are completed individually.
 
 ## Activities
 
-### Activity 2: Spring MVC
+### Spring Boot Coursework
 
-**Latest activity**
+The activities introduce the tools and Spring features used throughout the course. They cover application setup, web forms, business services, and REST endpoints. Each report includes screenshots and explanations of the work.
 
-[View Activity 2](activities/activity2/README.md)
+[View Activity Source Code](activities/code/)
 
-This activity covered controllers, model attributes, request parameters, and Thymeleaf views. It also included a login form, input validation, an orders table, and a shared page layout.
+### Activity Progress
 
-Both applications were built with Maven and run as executable JAR files from PowerShell. The report includes screenshots, research answers, and a Mermaid diagram showing the login request flow.
+| Activity | Focus | Report |
+| --- | --- | --- |
+| 1 | Eclipse and Java setup, a Hello World application, and Maven builds | [Activity 1](activities/activity1/README.md) |
+| 2 | Spring MVC, Thymeleaf views, form validation, and shared layouts | [Activity 2](activities/activity2/README.md) |
+| 3 | Business services, dependency injection, bean scopes, and REST endpoints | [Activity 3](activities/activity3/README.md) |
 
-### Activity 1: Tools Installation, Validation, and Learning Maven
+### Latest Update: Activity 3
 
-[View Activity 1](activities/activity1/README.md)
+The login and orders application now gets its order data from a business service. Spring dependency injection connects the services to the controller.
 
-This activity focused on setting up Eclipse with Spring Tools and Java 17, creating a Hello World application, and building an executable JAR with Maven.
+Console tests compared prototype, request, session, and singleton scopes. REST endpoints were also added to return orders as JSON and XML. Both endpoints were checked in the browser and Postman.
 
-The report includes screenshots of the application running in Eclipse and PowerShell, along with answers to the research questions.
+- [Report and Screenshots](activities/activity3/README.md)
+- [REST API Design](activities/activity3/rest-api-design.md)
+- [Part 1 Source Code](activities/code/topic3-1/)
+- [Parts 2 and 3 Source Code](activities/code/topic3-2/)
 
 ## Milestones
 
@@ -38,15 +45,18 @@ The course project is a computer parts inventory application based on my work in
 | --- | --- | --- |
 | 1 | Project proposal, planned features, solo work plan, risks, and initial design | [Milestone 1](milestones/milestone1/README.md) |
 | 2 | Home page, registration, validation, simulated login, and responsive layouts | [Milestone 2](milestones/milestone2/README.md) |
+| 3 | Service interfaces, dependency injection, validated part creation, and updated design | [Milestone 3](milestones/milestone3/README.md) |
 
-### Latest Update: Milestone 2
+### Latest Update: Milestone 3
 
-The application now includes a home page, registration, simulated login, an inventory landing page, and logout. Forms display messages when information needs to be corrected, and navigation changes when a user logs in or out.
+Users can now open Add Part from the navigation or inventory page, enter component information, and review an accepted submission on a confirmation page. The form checks required fields, supported categories, whole-number quantities, and costs with up to two decimal places.
 
-The pages use a shared Thymeleaf layout with Bootstrap and custom CSS. Layout checks covered Opera GX, Microsoft Edge, a physical iPhone 16 Pro Max using Chrome, and iPad Pro 13 emulation in Edge DevTools.
+Registration and login now use service interfaces with constructor injection. The new pages use the same shared Thymeleaf layout and navy and teal theme as the rest of the application.
 
-Accounts are temporarily stored in memory. Database storage and full inventory management will be added in later milestones.
+Testing covered registration, login, part validation, navigation, and phone and tablet layouts through DevTools emulation. The application also passed a Maven build using Java 17.
 
-- [Design Report and Screenshots](milestones/milestone2/README.md)
-- [Video Demonstration](https://youtu.be/LT1w99JllCw)
-- [Draft Database Script](milestones/milestone2/database/schema-draft.sql)
+Accounts remain in memory, and part submissions are not saved. Database persistence is planned for Milestone 4.
+
+- [Design Report and Screenshots](milestones/milestone3/README.md)
+- [Video Demonstration](https://youtu.be/jWA0RCb9LVA)
+- [Draft Database Script](milestones/milestone3/database/schema-draft.sql)

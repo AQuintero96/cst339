@@ -10,28 +10,28 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gcu.business.AccountService;
-import com.gcu.business.RegistrationService;
+import com.gcu.business.AccountServiceInterface;
+import com.gcu.business.RegistrationServiceInterface;
 import com.gcu.model.UserModel;
 
 /**
- * Displays the registration form and coordinates temporary account creation.
+ * Handles registration requests using injected service interfaces.
  */
 @Controller
 public class RegistrationController {
 
-    private final RegistrationService registrationService;
-    private final AccountService accountService;
+    private final RegistrationServiceInterface registrationService;
+    private final AccountServiceInterface accountService;
 
     /**
-     * Supplies the services used for registration.
+     * Supplies the registration services through constructor injection.
      *
      * @param registrationService the password confirmation service
-     * @param accountService the temporary account service
+     * @param accountService the account registration service
      */
     public RegistrationController(
-            RegistrationService registrationService,
-            AccountService accountService) {
+            RegistrationServiceInterface registrationService,
+            AccountServiceInterface accountService) {
 
         this.registrationService = registrationService;
         this.accountService = accountService;
@@ -51,7 +51,7 @@ public class RegistrationController {
     }
 
     /**
-     * Validates registration details and creates a temporary account.
+     * Validates the form and requests account creation.
      *
      * @param userModel the submitted registration values
      * @param bindingResult the binding and validation results
@@ -85,7 +85,7 @@ public class RegistrationController {
             return "register";
         }
 
-        // Leaves account creation and duplicate checking in the service.
+        // The service handles account creation and duplicate detection.
         if (!accountService.register(userModel)) {
             bindingResult.rejectValue(
                     "username",
@@ -98,7 +98,6 @@ public class RegistrationController {
                 "successMessage",
                 "Account created successfully. Please log in.");
 
-        // Redirecting prevents refresh from repeating the registration request.
         return "redirect:/login";
     }
 }
