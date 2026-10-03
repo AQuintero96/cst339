@@ -8,7 +8,7 @@ Activities and milestones are organized separately. Related assignments build on
 
 ### Spring Boot Coursework
 
-The activities introduce the tools and Spring features used throughout the course. They cover application setup, web forms, business services, and REST endpoints. Each report includes screenshots and explanations of the work.
+The activities introduce the tools and Spring features used throughout the course. They cover application setup, web forms, business services, REST endpoints, and database access.
 
 [View Activity Source Code](activities/code/)
 
@@ -19,17 +19,23 @@ The activities introduce the tools and Spring features used throughout the cours
 | 1 | Eclipse and Java setup, a Hello World application, and Maven builds | [Activity 1](activities/activity1/README.md) |
 | 2 | Spring MVC, Thymeleaf views, form validation, and shared layouts | [Activity 2](activities/activity2/README.md) |
 | 3 | Business services, dependency injection, bean scopes, and REST endpoints | [Activity 3](activities/activity3/README.md) |
+| 4 | MySQL, Spring JDBC, Spring Data JDBC, and custom SQL queries | [Activity 4](activities/activity4/README.md) |
 
-### Latest Update: Activity 3
+### Latest Update: Activity 4
 
-The login and orders application now gets its order data from a business service. Spring dependency injection connects the services to the controller.
+The orders application now reads records from MySQL. Three separate projects demonstrate JdbcTemplate, a Spring Data JDBC repository, and custom SQL queries.
 
-Console tests compared prototype, request, session, and singleton scopes. REST endpoints were also added to return orders as JSON and XML. Both endpoints were checked in the browser and Postman.
+Each version displayed the activity's database orders. The final project passed a Maven build using Java 17, and its executable JAR displayed all 11 records when run from PowerShell.
 
-- [Report and Screenshots](activities/activity3/README.md)
-- [REST API Design](activities/activity3/rest-api-design.md)
-- [Part 1 Source Code](activities/code/topic3-1/)
-- [Parts 2 and 3 Source Code](activities/code/topic3-2/)
+The report is divided into shorter pages for planning, design, and testing. Screenshots appear as clickable thumbnails.
+
+- [Activity Overview](activities/activity4/README.md)
+- [Analysis and Planning](activities/activity4/analysisPlanning.md)
+- [Design and Setup](activities/activity4/design.md)
+- [Testing and Screenshots](activities/activity4/test.md)
+- [Part 1 Source Code](activities/code/topic4-1/)
+- [Part 2 Source Code](activities/code/topic4-2/)
+- [Part 3 Source Code](activities/code/topic4-3/)
 
 ## Milestones
 

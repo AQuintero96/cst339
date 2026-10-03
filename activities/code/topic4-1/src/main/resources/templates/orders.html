@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">My Orders</title>
+</head>
+<body>
+
+    <!-- Places the orders table inside the shared layout. -->
+    <div layout:fragment="content">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Order Number</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Displays a message when the order list is empty. -->
+                    <tr th:if="${orders.empty}">
+                        <td colspan="4">No Orders Available</td>
+                    </tr>
+
+                    <!-- Creates one table row for each order. -->
+                    <tr th:each="order : ${orders}">
+                        <td th:text="${order.orderNo}">1001</td>
+                        <td th:text="${order.productName}">Notebook</td>
+                        <td th:text="${#numbers.formatDecimal(order.price, 1, 2)}">
+                            4.99
+                        </td>
+                        <td th:text="${order.quantity}">3</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <a th:href="@{/login/}" class="btn btn-outline-primary">
+            Return to Login
+        </a>
+    </div>
+
+</body>
+</html>
