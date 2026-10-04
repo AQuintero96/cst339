@@ -1,31 +1,37 @@
 package com.gcu.business;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.springframework.stereotype.Service;
 
+import com.gcu.data.PartDataAccessInterface;
 import com.gcu.model.PartModel;
 
 /**
- * Processes part creation without database persistence.
+ * Prepares validated part information and requests database persistence.
  */
 @Service
 public class PartService implements PartServiceInterface {
 
-    private final AtomicLong nextId = new AtomicLong(1);
+    private final PartDataAccessInterface partDataService;
 
     /**
-     * Copies validated values and assigns a temporary identifier.
+     * Receives the part DAO through constructor injection.
+     *
+     * @param partDataService the part persistence service
+     */
+    public PartService(PartDataAccessInterface partDataService) {
+        this.partDataService = partDataService;
+    }
+
+    /**
+     * Normalizes submitted text and saves the part.
      *
      * @param part the validated submission
-     * @return the part used for the creation confirmation
+     * @return the saved part with its database identifier
      */
     @Override
     public PartModel createPart(PartModel part) {
         PartModel createdPart = new PartModel();
 
-        // IDs are temporary and restart at one when the application restarts.
-        createdPart.setPartId(nextId.getAndIncrement());
         createdPart.setPartName(part.getPartName().trim());
         createdPart.setCategory(part.getCategory());
         createdPart.setManufacturer(part.getManufacturer().trim());
@@ -38,6 +44,8 @@ public class PartService implements PartServiceInterface {
         createdPart.setDescription(
                 description == null ? "" : description.trim());
 
+        // MySQL assigns the identifier after the insert.
+        createdPart.setPartId(partDataService.create(createdPart));
         return createdPart;
     }
 }

@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,17 +22,20 @@ import com.gcu.model.LoginModel;
 import com.gcu.model.SessionUser;
 
 /**
- * Handles simulated login and logout using an injected account service.
+ * Handles database-backed login, the inventory landing page, and logout.
  */
 @Controller
 public class LoginController {
 
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(LoginController.class);
+
     private final AccountServiceInterface accountService;
 
     /**
-     * Supplies the account service through constructor injection.
+     * Receives the account service through constructor injection.
      *
-     * @param accountService the service used to check credentials
+     * @param accountService the credential checking service
      */
     public LoginController(AccountServiceInterface accountService) {
         this.accountService = accountService;
@@ -38,7 +44,7 @@ public class LoginController {
     /**
      * Displays an empty login form.
      *
-     * @param model the data supplied to the view
+     * @param model the view attributes
      * @return the login template
      */
     @GetMapping("/login")
@@ -49,13 +55,13 @@ public class LoginController {
     }
 
     /**
-     * Validates credentials and establishes the logged-in session.
+     * Checks credentials and establishes a new session.
      *
      * @param loginModel the submitted credentials
-     * @param bindingResult the binding and validation results
-     * @param model the data supplied to the view
+     * @param bindingResult the validation results
+     * @param model the view attributes
      * @param request the current HTTP request
-     * @return the login form or a redirect to inventory
+     * @return the form or a redirect to inventory
      */
     @PostMapping("/login")
     public String processLogin(
@@ -70,9 +76,22 @@ public class LoginController {
             return "login";
         }
 
-        Optional<SessionUser> user = accountService.authenticate(
-                loginModel.getUsername(),
-                loginModel.getPassword());
+        Optional<SessionUser> user;
+
+        try {
+            user = accountService.authenticate(
+                    loginModel.getUsername(),
+                    loginModel.getPassword());
+        } catch (DataAccessException exception) {
+            // Reports the failure without logging submitted credentials.
+            LOGGER.error("Database operation failed during login: {}",
+                    exception.getClass().getSimpleName());
+
+            bindingResult.reject(
+                    "login.unavailable",
+                    "Login is temporarily unavailable. Please try again.");
+            return "login";
+        }
 
         if (!user.isPresent()) {
             bindingResult.reject(
@@ -81,7 +100,7 @@ public class LoginController {
             return "login";
         }
 
-        // Starts a fresh session after successful credential checking.
+        // Replaces any previous session after successful authentication.
         HttpSession previousSession = request.getSession(false);
 
         if (previousSession != null) {
@@ -95,7 +114,7 @@ public class LoginController {
     /**
      * Displays the inventory landing page.
      *
-     * @param model the data supplied to the view
+     * @param model the view attributes
      * @return the inventory template
      */
     @GetMapping("/inventory")
@@ -105,10 +124,10 @@ public class LoginController {
     }
 
     /**
-     * Ends the current login session.
+     * Ends the session and redirects to login.
      *
      * @param request the current HTTP request
-     * @param redirectAttributes the logout confirmation message
+     * @param redirectAttributes the logout message
      * @return a redirect to login
      */
     @PostMapping("/logout")
@@ -123,8 +142,7 @@ public class LoginController {
         }
 
         redirectAttributes.addFlashAttribute(
-                "successMessage",
-                "You have been logged out.");
+                "successMessage", "You have been logged out.");
 
         return "redirect:/login";
     }

@@ -8,10 +8,10 @@ import com.gcu.model.PartModel;
 public interface PartServiceInterface {
 
     /**
-     * Processes a validated part submission.
+     * Saves validated part information.
      *
      * @param part the validated part information
-     * @return the created part with a temporary identifier
+     * @return the saved part with its database identifier
      */
     PartModel createPart(PartModel part);
 }

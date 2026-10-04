@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,16 +23,19 @@ import com.gcu.business.PartServiceInterface;
 import com.gcu.model.PartModel;
 
 /**
- * Displays the part creation form and handles submitted part information.
+ * Handles part creation forms and displays saved submission details.
  */
 @Controller
 @RequestMapping("/parts")
 public class PartController {
 
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(PartController.class);
+
     private final PartServiceInterface partService;
 
     /**
-     * Supplies the part service through constructor injection.
+     * Receives the part business service.
      *
      * @param partService the part creation service
      */
@@ -38,7 +44,7 @@ public class PartController {
     }
 
     /**
-     * Limits form binding to fields users are allowed to enter.
+     * Allows binding only to user-editable fields.
      *
      * @param binder the form data binder
      */
@@ -50,9 +56,9 @@ public class PartController {
     }
 
     /**
-     * Supplies the categories displayed in the form.
+     * Supplies the supported component categories.
      *
-     * @return the supported component categories
+     * @return the category choices
      */
     @ModelAttribute("categories")
     public List<String> categories() {
@@ -62,10 +68,10 @@ public class PartController {
     }
 
     /**
-     * Displays an empty part creation form.
+     * Displays an empty creation form.
      *
-     * @param model the data supplied to the view
-     * @return the part form template
+     * @param model the view attributes
+     * @return the form template
      */
     @GetMapping("/new")
     public String displayForm(Model model) {
@@ -75,13 +81,13 @@ public class PartController {
     }
 
     /**
-     * Validates the submitted fields and requests part creation.
+     * Validates the submission and requests database persistence.
      *
      * @param partModel the submitted part
-     * @param bindingResult the binding and validation results
-     * @param model the data supplied to the view
+     * @param bindingResult the validation results
+     * @param model the view attributes
      * @param redirectAttributes the confirmation data
-     * @return the form with errors or a redirect to confirmation
+     * @return the form or a redirect to confirmation
      */
     @PostMapping
     public String createPart(
@@ -90,23 +96,37 @@ public class PartController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
+        model.addAttribute("title", "Add Part");
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("title", "Add Part");
             return "part-form";
         }
 
-        PartModel createdPart = partService.createPart(partModel);
+        PartModel createdPart;
 
-        // Carries the result through one redirect without resubmitting the form.
+        try {
+            createdPart = partService.createPart(partModel);
+        } catch (DataAccessException exception) {
+            LOGGER.error("Database operation failed during part creation: {}",
+                    exception.getClass().getSimpleName());
+
+            bindingResult.reject(
+                    "part.unavailable",
+                    "Unable to confirm that the part was saved. "
+                    + "Please try again later.");
+            return "part-form";
+        }
+
+        // Redirects only after the service successfully saves the part.
         redirectAttributes.addFlashAttribute("createdPart", createdPart);
         return "redirect:/parts/created";
     }
 
     /**
-     * Displays the result of a successful part submission.
+     * Displays the result carried through the successful redirect.
      *
-     * @param model the data supplied to the view
-     * @return the confirmation template or a redirect to a new form
+     * @param model the view attributes
+     * @return the confirmation page or a new form
      */
     @GetMapping("/created")
     public String displayConfirmation(Model model) {

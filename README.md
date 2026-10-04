@@ -52,17 +52,21 @@ The course project is a computer parts inventory application based on my work in
 | 1 | Project proposal, planned features, solo work plan, risks, and initial design | [Milestone 1](milestones/milestone1/README.md) |
 | 2 | Home page, registration, validation, simulated login, and responsive layouts | [Milestone 2](milestones/milestone2/README.md) |
 | 3 | Service interfaces, dependency injection, validated part creation, and updated design | [Milestone 3](milestones/milestone3/README.md) |
+| 4 | MySQL persistence for registration, login, and part creation using Spring JDBC | [Milestone 4](milestones/milestone4/README.md) |
 
-### Latest Update: Milestone 3
+### Latest Update: Milestone 4
 
-Users can now open Add Part from the navigation or inventory page, enter component information, and review an accepted submission on a confirmation page. The form checks required fields, supported categories, whole-number quantities, and costs with up to two decimal places.
+Accounts and parts are now saved in MySQL. Registration stores account information with salted password hashes, login checks the stored credentials, and part creation returns a database-generated ID.
 
-Registration and login now use service interfaces with constructor injection. The new pages use the same shared Thymeleaf layout and navy and teal theme as the rest of the application.
+Business services access the database through DAO interfaces and Spring JDBC implementations. The application retains its shared Thymeleaf layout and existing form validation.
 
-Testing covered registration, login, part validation, navigation, and phone and tablet layouts through DevTools emulation. The application also passed a Maven build using Java 17.
+Testing confirmed that accounts and parts remain after an application restart. Duplicate usernames, incorrect passwords, and negative part values were rejected. The application also passed a Java 17 Maven build and ran successfully as an executable JAR outside Eclipse.
 
-Accounts remain in memory, and part submissions are not saved. Database persistence is planned for Milestone 4.
+The report includes planning, design diagrams, database setup instructions, and screenshot evidence in separate pages. Browsing, editing, and deleting saved parts are planned for Milestone 5.
 
-- [Design Report and Screenshots](milestones/milestone3/README.md)
-- [Video Demonstration](https://youtu.be/jWA0RCb9LVA)
-- [Draft Database Script](milestones/milestone3/database/schema-draft.sql)
+- [Milestone Overview](milestones/milestone4/README.md)
+- [Analysis and Planning](milestones/milestone4/analysisPlanning.md)
+- [Design and Setup](milestones/milestone4/design.md)
+- [Testing and Screenshots](milestones/milestone4/test.md)
+- [Video Demonstration](https://youtu.be/aHwgYQovq8A)
+- [Database Script](milestones/milestone4/database/schema.sql)

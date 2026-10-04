@@ -8,54 +8,52 @@
     <title>Inventory | IT Parts Inventory Manager</title>
 </head>
 <body>
+<div layout:fragment="content">
+    <section class="container py-5" aria-labelledby="inventory-heading">
+        <p class="eyebrow">Computer components</p>
+        <h1 id="inventory-heading">Parts Inventory</h1>
 
-    <div layout:fragment="content">
-        <section class="container py-5" aria-labelledby="inventory-heading">
-            <p class="eyebrow">Computer components</p>
-            <h1 id="inventory-heading">Parts Inventory</h1>
+        <!-- Personalizes the page when a login session exists. -->
+        <p th:if="${session.currentUser != null}"
+           th:text="${'Welcome, ' + session.currentUser.firstName + '.'}"
+           class="text-secondary">
+            Welcome.
+        </p>
 
-            <!-- Personalizes the page when a login session exists. -->
-            <p th:if="${session.currentUser != null}"
-               th:text="${'Welcome, ' + session.currentUser.firstName + '.'}"
-               class="text-secondary">
-                Welcome.
-            </p>
+        <p th:if="${session.currentUser == null}" class="text-secondary">
+            Welcome to the parts inventory.
+            <a th:href="@{/login}">Log in</a> to start your session.
+        </p>
 
-            <p th:if="${session.currentUser == null}"
-               class="text-secondary">
-                Welcome to the parts inventory.
-                <a th:href="@{/login}">Log in</a> to start your session.
-            </p>
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body p-4">
+                <div class="d-flex flex-wrap justify-content-between
+                            align-items-center gap-3 mb-3">
+                    <h2 class="h4 mb-0">Inventory Overview</h2>
+                    <a class="btn btn-accent" th:href="@{/parts/new}">
+                        Add Part
+                    </a>
+                </div>
 
-            <div class="card border-0 shadow-sm mt-4">
-                <div class="card-body p-4">
-                    <div class="d-flex flex-wrap justify-content-between
-                                align-items-center gap-3 mb-3">
-                        <h2 class="h4 mb-0">Inventory Overview</h2>
-                        <a class="btn btn-accent" th:href="@{/parts/new}">
-                            Add Part
-                        </a>
-                    </div>
+                <p class="text-secondary">
+                    Use Add Part to save a component's name, category,
+                    manufacturer, model, quantity, unit cost, and storage
+                    location.
+                </p>
 
-                    <p class="text-secondary">
-                        Enter a component's name, category, manufacturer,
-                        model, quantity, unit cost, and storage location
-                        using the Add Part form.
+                <!-- Describes the available functionality without implying
+                     that the database contains no records. -->
+                <div class="border rounded p-4 text-center bg-light">
+                    <h3 class="h5">Part entry is available</h3>
+                    <p class="text-secondary mb-0">
+                        Submitted parts are saved. Browsing, editing, and
+                        deleting saved parts will be available in a later
+                        version.
                     </p>
-
-                    <!-- Explains why accepted submissions do not appear in a list. -->
-                    <div class="border rounded p-4 text-center bg-light">
-                        <h3 class="h5">No saved inventory records</h3>
-                        <p class="text-secondary mb-0">
-                            You can submit part information and review its
-                            details on the confirmation page. Part records
-                            are not saved in this version.
-                        </p>
-                    </div>
                 </div>
             </div>
-        </section>
-    </div>
-
+        </div>
+    </section>
+</div>
 </body>
 </html>

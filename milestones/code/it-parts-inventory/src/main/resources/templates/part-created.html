@@ -16,19 +16,18 @@
                 <h1 id="confirmation-heading">Part Created</h1>
 
                 <div class="alert alert-success" role="status">
-                    The part information was accepted successfully.
+                    The part was saved successfully.
                 </div>
 
-                <!-- Shows the submitted result without implying database storage. -->
                 <p class="text-secondary">
-                    This demonstration does not retain part records.
-                    Review the submitted information below.
+                    Review the saved part information below.
                 </p>
 
+                <!-- Displays the saved submission and database-generated ID. -->
                 <div class="card border-0 shadow-sm">
                     <div class="card-body p-4">
                         <dl class="row mb-0">
-                            <dt class="col-sm-4">Temporary Part ID</dt>
+                            <dt class="col-sm-4">Part ID</dt>
                             <dd class="col-sm-8"
                                 th:text="${createdPart.partId}"></dd>
 

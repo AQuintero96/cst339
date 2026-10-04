@@ -4,22 +4,22 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Locale;
-import java.util.Map;
+import java.util.Base64;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import com.gcu.data.AccountDataAccessInterface;
+import com.gcu.model.AccountRecord;
 import com.gcu.model.SessionUser;
 import com.gcu.model.UserModel;
 
 /**
- * Implements account operations using temporary in-memory storage.
- * Accounts are discarded when the application restarts.
+ * Registers and authenticates database accounts using salted password hashes.
  */
 @Service
 public class AccountService implements AccountServiceInterface {
@@ -27,50 +27,45 @@ public class AccountService implements AccountServiceInterface {
     private static final int SALT_LENGTH = 16;
     private static final int HASH_LENGTH = 256;
     private static final int HASH_ITERATIONS = 600000;
+    private static final String ALGORITHM = "PBKDF2WithHmacSHA256";
 
-    private final Map<String, AccountRecord> accounts =
-            new ConcurrentHashMap<>();
-
+    private final AccountDataAccessInterface accountDataService;
     private final SecureRandom secureRandom = new SecureRandom();
 
     /**
-     * Registers a validated user when the username is available.
+     * Receives the account DAO through constructor injection.
      *
-     * @param user the validated registration form
+     * @param accountDataService the account persistence service
+     */
+    public AccountService(AccountDataAccessInterface accountDataService) {
+        this.accountDataService = accountDataService;
+    }
+
+    /**
+     * Stores a validated registration with encoded password credentials.
+     *
+     * @param user the validated registration information
      * @return true when created, or false for a duplicate username
      */
     @Override
     public boolean register(UserModel user) {
-        String key = normalizeUsername(user.getUsername());
+        String encodedPassword = encodePassword(user.getPassword());
 
-        if (accounts.containsKey(key)) {
+        try {
+            accountDataService.create(user, encodedPassword);
+            return true;
+        } catch (DuplicateKeyException exception) {
+            // The database unique constraint decides whether a name is taken.
             return false;
         }
-
-        byte[] salt = new byte[SALT_LENGTH];
-        secureRandom.nextBytes(salt);
-
-        byte[] passwordHash = hashPassword(user.getPassword(), salt);
-
-        AccountRecord account = new AccountRecord(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getPhoneNumber(),
-                user.getUsername(),
-                salt,
-                passwordHash);
-
-        // Prevents concurrent requests from creating the same username.
-        return accounts.putIfAbsent(key, account) == null;
     }
 
     /**
-     * Checks credentials against the temporary account records.
+     * Checks submitted credentials against the stored account.
      *
      * @param username the submitted username
      * @param password the submitted password
-     * @return the session user when credentials match
+     * @return session information when authentication succeeds
      */
     @Override
     public Optional<SessionUser> authenticate(
@@ -80,56 +75,118 @@ public class AccountService implements AccountServiceInterface {
             return Optional.empty();
         }
 
-        AccountRecord account = accounts.get(normalizeUsername(username));
+        Optional<AccountRecord> result =
+                accountDataService.findByUsername(username);
 
-        if (account == null) {
+        if (!result.isPresent()) {
             return Optional.empty();
         }
 
-        byte[] submittedHash = hashPassword(password, account.salt);
+        AccountRecord account = result.get();
+
+        if (!passwordMatches(password, account.getPasswordHash())) {
+            return Optional.empty();
+        }
+
+        // Password credentials remain outside the user's HTTP session.
+        return Optional.of(new SessionUser(
+                account.getUsername(), account.getFirstName()));
+    }
+
+    /**
+     * Encodes the algorithm, iteration count, salt, and hash in one value.
+     *
+     * @param password the submitted password
+     * @return credentials suitable for the password_hash column
+     */
+    private String encodePassword(String password) {
+        byte[] salt = new byte[SALT_LENGTH];
+        secureRandom.nextBytes(salt);
+
+        byte[] hash = hashPassword(password, salt, HASH_ITERATIONS);
 
         try {
-            if (!MessageDigest.isEqual(
-                    account.passwordHash, submittedHash)) {
-                return Optional.empty();
-            }
-
-            return Optional.of(
-                    new SessionUser(account.username, account.firstName));
+            return ALGORITHM + "$" + HASH_ITERATIONS + "$"
+                    + Base64.getEncoder().encodeToString(salt) + "$"
+                    + Base64.getEncoder().encodeToString(hash);
         } finally {
-            Arrays.fill(submittedHash, (byte) 0);
+            Arrays.fill(hash, (byte) 0);
         }
     }
 
     /**
-     * Creates a consistent key for case-insensitive username lookup.
+     * Verifies a password using the supported stored credential format.
      *
-     * @param username the submitted username
-     * @return the normalized username
+     * @param password the submitted password
+     * @param encodedPassword the stored credential value
+     * @return true when the password matches
      */
-    private String normalizeUsername(String username) {
-        return username.trim().toLowerCase(Locale.ROOT);
+    private boolean passwordMatches(
+            String password, String encodedPassword) {
+
+        if (encodedPassword == null) {
+            return false;
+        }
+
+        String[] fields = encodedPassword.split("\\$", -1);
+
+        if (fields.length != 4 || !ALGORITHM.equals(fields[0])) {
+            return false;
+        }
+
+        byte[] expectedHash = null;
+        byte[] submittedHash = null;
+
+        try {
+            int iterations = Integer.parseInt(fields[1]);
+
+            // Accepts only the parameters supported by this implementation.
+            if (iterations != HASH_ITERATIONS) {
+                return false;
+            }
+
+            byte[] salt = Base64.getDecoder().decode(fields[2]);
+            expectedHash = Base64.getDecoder().decode(fields[3]);
+
+            if (salt.length != SALT_LENGTH
+                    || expectedHash.length != HASH_LENGTH / 8) {
+                return false;
+            }
+
+            submittedHash = hashPassword(password, salt, iterations);
+            return MessageDigest.isEqual(expectedHash, submittedHash);
+        } catch (IllegalArgumentException exception) {
+            // Malformed stored credentials cannot authenticate a user.
+            return false;
+        } finally {
+            if (expectedHash != null) {
+                Arrays.fill(expectedHash, (byte) 0);
+            }
+
+            if (submittedHash != null) {
+                Arrays.fill(submittedHash, (byte) 0);
+            }
+        }
     }
 
     /**
-     * Creates a salted password hash.
+     * Derives a password hash using PBKDF2.
      *
      * @param password the submitted password
      * @param salt the account's random salt
-     * @return the derived password hash
+     * @param iterations the number of derivation iterations
+     * @return the derived hash
      */
-    private byte[] hashPassword(String password, byte[] salt) {
-        char[] characters = password.toCharArray();
+    private byte[] hashPassword(
+            String password, byte[] salt, int iterations) {
 
+        char[] characters = password.toCharArray();
         PBEKeySpec specification = new PBEKeySpec(
-                characters,
-                salt,
-                HASH_ITERATIONS,
-                HASH_LENGTH);
+                characters, salt, iterations, HASH_LENGTH);
 
         try {
             SecretKeyFactory factory =
-                    SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+                    SecretKeyFactory.getInstance(ALGORITHM);
 
             return factory.generateSecret(specification).getEncoded();
         } catch (GeneralSecurityException exception) {
@@ -138,50 +195,6 @@ public class AccountService implements AccountServiceInterface {
         } finally {
             specification.clearPassword();
             Arrays.fill(characters, '\0');
-        }
-    }
-
-    /**
-     * Stores registration details and hashed credentials in memory.
-     * Password confirmation and plaintext passwords are not retained.
-     */
-    private static final class AccountRecord {
-
-        private final String firstName;
-        private final String lastName;
-        private final String email;
-        private final String phoneNumber;
-        private final String username;
-        private final byte[] salt;
-        private final byte[] passwordHash;
-
-        /**
-         * Creates a temporary account record.
-         *
-         * @param firstName the registered first name
-         * @param lastName the registered last name
-         * @param email the registered email address
-         * @param phoneNumber the registered phone number
-         * @param username the registered username
-         * @param salt the random password salt
-         * @param passwordHash the derived password hash
-         */
-        private AccountRecord(
-                String firstName,
-                String lastName,
-                String email,
-                String phoneNumber,
-                String username,
-                byte[] salt,
-                byte[] passwordHash) {
-
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.email = email;
-            this.phoneNumber = phoneNumber;
-            this.username = username;
-            this.salt = salt;
-            this.passwordHash = passwordHash;
         }
     }
 }
