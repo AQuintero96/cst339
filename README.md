@@ -8,7 +8,7 @@ Activities and milestones are organized separately. Related assignments build on
 
 ### Spring Boot Coursework
 
-The activities introduce the tools and Spring features used throughout the course. They cover application setup, web forms, business services, REST endpoints, and database access.
+The activities introduce the tools and Spring features used throughout the course. They cover application setup, web forms, business services, REST endpoints, and relational and document database access.
 
 [View Activity Source Code](activities/code/)
 
@@ -20,22 +20,23 @@ The activities introduce the tools and Spring features used throughout the cours
 | 2 | Spring MVC, Thymeleaf views, form validation, and shared layouts | [Activity 2](activities/activity2/README.md) |
 | 3 | Business services, dependency injection, bean scopes, and REST endpoints | [Activity 3](activities/activity3/README.md) |
 | 4 | MySQL, Spring JDBC, Spring Data JDBC, and custom SQL queries | [Activity 4](activities/activity4/README.md) |
+| 5 | MongoDB Atlas, document persistence, JSON/XML responses, and identifier queries | [Activity 5](activities/activity5/README.md) |
 
-### Latest Update: Activity 4
+### Latest Update: Activity 5
 
-The orders application now reads records from MySQL. Three separate projects demonstrate JdbcTemplate, a Spring Data JDBC repository, and custom SQL queries.
+The orders application now uses Spring Data MongoDB to access documents stored in MongoDB Atlas. The application displays saved orders through Thymeleaf and provides JSON and XML responses.
 
-Each version displayed the activity's database orders. The final project passed a Maven build using Java 17, and its executable JAR displayed all 11 records when run from PowerShell.
+A dedicated verification profile saved an additional order and read it back successfully. A derived repository query retrieves an order by its document identifier, and an absent identifier produces a not-found response.
+
+The Maven build completed with one test, zero failures, and zero errors. The executable JAR ran from PowerShell and displayed all six stored orders.
 
 The report is divided into shorter pages for planning, design, and testing. Screenshots appear as clickable thumbnails.
 
-- [Activity Overview](activities/activity4/README.md)
-- [Analysis and Planning](activities/activity4/analysisPlanning.md)
-- [Design and Setup](activities/activity4/design.md)
-- [Testing and Screenshots](activities/activity4/test.md)
-- [Part 1 Source Code](activities/code/topic4-1/)
-- [Part 2 Source Code](activities/code/topic4-2/)
-- [Part 3 Source Code](activities/code/topic4-3/)
+- [Activity Overview](activities/activity5/README.md)
+- [Analysis and Planning](activities/activity5/analysisPlanning.md)
+- [Design and Setup](activities/activity5/design.md)
+- [Testing and Screenshots](activities/activity5/test.md)
+- [Activity 5 Source Code](activities/code/topic5-1/)
 
 ## Milestones
 
