@@ -1,5 +1,6 @@
 package com.gcu.controller;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +19,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gcu.business.AccountServiceInterface;
+import com.gcu.business.PartServiceInterface;
 import com.gcu.model.LoginModel;
 import com.gcu.model.SessionUser;
 
 /**
- * Handles database-backed login, the inventory landing page, and logout.
+ * Handles login, the database inventory list, and logout.
  */
 @Controller
 public class LoginController {
@@ -31,21 +33,24 @@ public class LoginController {
             LoggerFactory.getLogger(LoginController.class);
 
     private final AccountServiceInterface accountService;
+    private final PartServiceInterface partService;
 
     /**
-     * Receives the account service through constructor injection.
-     *
-     * @param accountService the credential checking service
+     * Receives account and inventory business services.
+     * @param accountService credential checking service
+     * @param partService inventory service
      */
-    public LoginController(AccountServiceInterface accountService) {
+    public LoginController(
+            AccountServiceInterface accountService,
+            PartServiceInterface partService) {
         this.accountService = accountService;
+        this.partService = partService;
     }
 
     /**
-     * Displays an empty login form.
-     *
-     * @param model the view attributes
-     * @return the login template
+     * Displays the login form.
+     * @param model view attributes
+     * @return login template
      */
     @GetMapping("/login")
     public String displayLogin(Model model) {
@@ -55,13 +60,12 @@ public class LoginController {
     }
 
     /**
-     * Checks credentials and establishes a new session.
-     *
-     * @param loginModel the submitted credentials
-     * @param bindingResult the validation results
-     * @param model the view attributes
-     * @param request the current HTTP request
-     * @return the form or a redirect to inventory
+     * Checks credentials and starts a fresh authenticated session.
+     * @param loginModel submitted credentials
+     * @param bindingResult validation results
+     * @param model view attributes
+     * @param request current request
+     * @return login form or inventory redirect
      */
     @PostMapping("/login")
     public String processLogin(
@@ -80,29 +84,23 @@ public class LoginController {
 
         try {
             user = accountService.authenticate(
-                    loginModel.getUsername(),
-                    loginModel.getPassword());
+                    loginModel.getUsername(), loginModel.getPassword());
         } catch (DataAccessException exception) {
-            // Reports the failure without logging submitted credentials.
             LOGGER.error("Database operation failed during login: {}",
                     exception.getClass().getSimpleName());
-
-            bindingResult.reject(
-                    "login.unavailable",
+            bindingResult.reject("login.unavailable",
                     "Login is temporarily unavailable. Please try again.");
             return "login";
         }
 
         if (!user.isPresent()) {
-            bindingResult.reject(
-                    "login.invalid",
+            bindingResult.reject("login.invalid",
                     "Username or password is incorrect.");
             return "login";
         }
 
-        // Replaces any previous session after successful authentication.
+        // Replaces the old session to prevent reuse of its identifier.
         HttpSession previousSession = request.getSession(false);
-
         if (previousSession != null) {
             previousSession.invalidate();
         }
@@ -112,29 +110,48 @@ public class LoginController {
     }
 
     /**
-     * Displays the inventory landing page.
-     *
-     * @param model the view attributes
-     * @return the inventory template
+     * Displays database inventory for a logged-in user.
+     * @param request current request
+     * @param model view attributes
+     * @return inventory template or login redirect
      */
     @GetMapping("/inventory")
-    public String displayInventory(Model model) {
+    public String displayInventory(
+            HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("currentUser") == null) {
+            return "redirect:/login";
+        }
+
         model.addAttribute("title", "Inventory");
+
+        try {
+            model.addAttribute("parts", partService.getParts());
+            model.addAttribute("loadFailed", false);
+        } catch (DataAccessException exception) {
+            LOGGER.error("Inventory retrieval failed: {}",
+                    exception.getClass().getSimpleName());
+
+            // A database failure must not appear as an empty inventory.
+            model.addAttribute("parts", Collections.emptyList());
+            model.addAttribute("loadFailed", true);
+            model.addAttribute("errorMessage",
+                    "Inventory is temporarily unavailable. Please try again.");
+        }
+
         return "inventory";
     }
 
     /**
-     * Ends the session and redirects to login.
-     *
-     * @param request the current HTTP request
-     * @param redirectAttributes the logout message
-     * @return a redirect to login
+     * Ends the current session.
+     * @param request current request
+     * @param redirectAttributes logout notification
+     * @return login redirect
      */
     @PostMapping("/logout")
     public String logout(
             HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
-
         HttpSession session = request.getSession(false);
 
         if (session != null) {
@@ -143,7 +160,6 @@ public class LoginController {
 
         redirectAttributes.addFlashAttribute(
                 "successMessage", "You have been logged out.");
-
         return "redirect:/login";
     }
 }

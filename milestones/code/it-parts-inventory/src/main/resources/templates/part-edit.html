@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Part | IT Parts Inventory Manager</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="container py-5" aria-labelledby="edit-heading">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <p class="eyebrow">Computer components</p>
+                <h1 id="edit-heading">Edit Part</h1>
+                <p class="text-secondary">
+                    Update the saved component details.
+                    All fields except Description are required.
+                </p>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+                        <!-- The route supplies the identifier.
+                             Only editable fields are bound. -->
+                        <form th:action="@{/parts/{id}/edit(id=${partId})}"
+                              th:object="${partModel}"
+                              method="post" novalidate>
+
+                            <div th:if="${#fields.hasErrors('*')}"
+                                 class="alert alert-danger" role="alert">
+                                Please review the errors below.
+                            </div>
+
+                            <div th:each="error : ${#fields.globalErrors()}"
+                                 class="alert alert-danger" role="alert"
+                                 th:text="${error}"></div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="partName" class="form-label">
+                                        Part Name
+                                    </label>
+                                    <input type="text" id="partName"
+                                           class="form-control"
+                                           th:field="*{partName}"
+                                           th:errorclass="is-invalid"
+                                           aria-describedby="nameError"
+                                           required>
+                                    <div id="nameError" class="invalid-feedback"
+                                         th:errors="*{partName}"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="category" class="form-label">
+                                        Category
+                                    </label>
+                                    <select id="category" class="form-select"
+                                            th:field="*{category}"
+                                            th:errorclass="is-invalid"
+                                            aria-describedby="categoryError"
+                                            required>
+                                        <option value="">Select a category</option>
+                                        <option th:each="item : ${categories}"
+                                                th:value="${item}"
+                                                th:text="${item}"></option>
+                                    </select>
+                                    <div id="categoryError"
+                                         class="invalid-feedback"
+                                         th:errors="*{category}"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="manufacturer" class="form-label">
+                                        Manufacturer
+                                    </label>
+                                    <input type="text" id="manufacturer"
+                                           class="form-control"
+                                           th:field="*{manufacturer}"
+                                           th:errorclass="is-invalid"
+                                           aria-describedby="manufacturerError"
+                                           required>
+                                    <div id="manufacturerError"
+                                         class="invalid-feedback"
+                                         th:errors="*{manufacturer}"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="model" class="form-label">
+                                        Model
+                                    </label>
+                                    <input type="text" id="model"
+                                           class="form-control"
+                                           th:field="*{model}"
+                                           th:errorclass="is-invalid"
+                                           aria-describedby="modelError"
+                                           required>
+                                    <div id="modelError" class="invalid-feedback"
+                                         th:errors="*{model}"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="quantity" class="form-label">
+                                        Quantity
+                                    </label>
+                                    <input type="text" id="quantity"
+                                           inputmode="numeric"
+                                           class="form-control"
+                                           th:field="*{quantity}"
+                                           th:errorclass="is-invalid"
+                                           aria-describedby="quantityError"
+                                           required>
+                                    <div id="quantityError"
+                                         class="invalid-feedback"
+                                         th:errors="*{quantity}"></div>
+                                    <div class="form-text">
+                                        Enter a whole number, zero or greater.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="unitCost" class="form-label">
+                                        Unit Cost (USD)
+                                    </label>
+                                    <input type="text" id="unitCost"
+                                           inputmode="decimal"
+                                           class="form-control"
+                                           th:field="*{unitCost}"
+                                           th:errorclass="is-invalid"
+                                           aria-describedby="costError"
+                                           required>
+                                    <div id="costError" class="invalid-feedback"
+                                         th:errors="*{unitCost}"></div>
+                                    <div class="form-text">
+                                        Enter a nonnegative amount with up to
+                                        two decimal places.
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="storageLocation"
+                                           class="form-label">
+                                        Storage Location
+                                    </label>
+                                    <input type="text" id="storageLocation"
+                                           class="form-control"
+                                           th:field="*{storageLocation}"
+                                           th:errorclass="is-invalid"
+                                           aria-describedby="locationError"
+                                           required>
+                                    <div id="locationError"
+                                         class="invalid-feedback"
+                                         th:errors="*{storageLocation}"></div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="description" class="form-label">
+                                        Description (Optional)
+                                    </label>
+                                    <textarea id="description" rows="3"
+                                              class="form-control"
+                                              th:field="*{description}"
+                                              th:errorclass="is-invalid"
+                                              aria-describedby="descriptionError"></textarea>
+                                    <div id="descriptionError"
+                                         class="invalid-feedback"
+                                         th:errors="*{description}"></div>
+                                    <div class="form-text">
+                                        Maximum 1,000 characters.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-3 mt-4">
+                                <button class="btn btn-accent" type="submit">
+                                    Save Changes
+                                </button>
+                                <a class="btn btn-outline-secondary"
+                                   th:href="@{/parts/{id}(id=${partId})}">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

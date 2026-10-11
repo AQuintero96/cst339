@@ -42,7 +42,7 @@ The report is divided into shorter pages for planning, design, and testing. Scre
 
 ### IT Parts Inventory Manager
 
-The course project is a computer parts inventory application based on my work in IT. The finished application will track spare components, quantities, unit costs, and storage locations. Each milestone builds on the same application.
+The course project is a computer parts inventory application based on my work in IT. It tracks components, quantities, unit costs, and storage locations. Each milestone builds on the same application.
 
 [View Application Source Code](milestones/code/it-parts-inventory/)
 
@@ -54,20 +54,24 @@ The course project is a computer parts inventory application based on my work in
 | 2 | Home page, registration, validation, simulated login, and responsive layouts | [Milestone 2](milestones/milestone2/README.md) |
 | 3 | Service interfaces, dependency injection, validated part creation, and updated design | [Milestone 3](milestones/milestone3/README.md) |
 | 4 | MySQL persistence for registration, login, and part creation using Spring JDBC | [Milestone 4](milestones/milestone4/README.md) |
+| 5 | Inventory display, part details, validated updates, deletion, and test documentation | [Milestone 5](milestones/milestone5/README.md) |
 
-### Latest Update: Milestone 4
+### Latest Update: Milestone 5
 
-Accounts and parts are now saved in MySQL. Registration stores account information with salted password hashes, login checks the stored credentials, and part creation returns a database-generated ID.
+The application now lists saved parts and displays individual component details. Users can edit validated part information and delete records through a confirmation page.
 
-Business services access the database through DAO interfaces and Spring JDBC implementations. The application retains its shared Thymeleaf layout and existing form validation.
+Spring-managed business services use a DAO interface backed by Spring JDBC. The new pages retain the existing Thymeleaf layout and application styling.
 
-Testing confirmed that accounts and parts remain after an application restart. Duplicate usernames, incorrect passwords, and negative part values were rejected. The application also passed a Java 17 Maven build and ran successfully as an executable JAR outside Eclipse.
+Testing covered successful updates, rejected negative values, cancellation, deletion, missing records, logged-out access to the new workflows, and restart persistence.
 
-The report includes planning, design diagrams, database setup instructions, and screenshot evidence in separate pages. Browsing, editing, and deleting saved parts are planned for Milestone 5.
+Maven completed with one application-context test and no failures or errors. The executable JAR started successfully and displayed the saved inventory.
 
-- [Milestone Overview](milestones/milestone4/README.md)
-- [Analysis and Planning](milestones/milestone4/analysisPlanning.md)
-- [Design and Setup](milestones/milestone4/design.md)
-- [Testing and Screenshots](milestones/milestone4/test.md)
-- [Video Demonstration](https://youtu.be/aHwgYQovq8A)
+The updated report includes design diagrams, service contracts, a test plan, screenshots, and the video demonstration. Spring Security integration is planned for Milestone 6.
+
+- [Milestone Overview](milestones/milestone5/README.md)
+- [Analysis and Planning](milestones/milestone5/analysisPlanning.md)
+- [Design and Setup](milestones/milestone5/design.md)
+- [Test Plan](milestones/milestone5/testPlan.md)
+- [Testing and Screenshots](milestones/milestone5/test.md)
+- [Video Demonstration](https://youtu.be/6aJvDrHsrDI)
 - [Database Script](milestones/milestone4/database/schema.sql)

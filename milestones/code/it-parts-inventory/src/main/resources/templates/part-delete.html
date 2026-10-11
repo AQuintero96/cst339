@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Part | IT Parts Inventory Manager</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="container py-5" aria-labelledby="delete-heading">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <p class="eyebrow">Computer components</p>
+                <h1 id="delete-heading">Delete Part</h1>
+
+                <div class="alert alert-warning" role="alert">
+                    This permanently removes the inventory record.
+                    Select Cancel to keep it.
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <dl class="row">
+                            <dt class="col-sm-4">Part ID</dt>
+                            <dd class="col-sm-8" th:text="${part.partId}"></dd>
+
+                            <dt class="col-sm-4">Part Name</dt>
+                            <dd class="col-sm-8" th:text="${part.partName}"></dd>
+
+                            <dt class="col-sm-4">Category</dt>
+                            <dd class="col-sm-8" th:text="${part.category}"></dd>
+
+                            <dt class="col-sm-4">Quantity</dt>
+                            <dd class="col-sm-8" th:text="${part.quantity}"></dd>
+
+                            <dt class="col-sm-4">Storage Location</dt>
+                            <dd class="col-sm-8"
+                                th:text="${part.storageLocation}"></dd>
+                        </dl>
+
+                        <!-- Viewing this page never deletes the record.
+                             Deletion requires submitting this POST form. -->
+                        <form method="post"
+                              th:action="@{/parts/{id}/delete(id=${part.partId})}">
+                            <div class="d-flex flex-wrap gap-3">
+                                <button type="submit" class="btn btn-danger">
+                                    Confirm Delete
+                                </button>
+                                <a class="btn btn-outline-secondary"
+                                   th:href="@{/parts/{id}(id=${part.partId})}">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

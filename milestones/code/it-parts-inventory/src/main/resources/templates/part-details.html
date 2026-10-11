@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <meta charset="UTF-8">
+    <title>Part Details | IT Parts Inventory Manager</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="container py-5" aria-labelledby="details-heading">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <p class="eyebrow">Computer components</p>
+                <h1 id="details-heading">Part Details</h1>
+                <p class="text-secondary">
+                    Saved information for this inventory component.
+                </p>
+
+                <div th:if="${successMessage != null}"
+                     class="alert alert-success" role="status"
+                     th:text="${successMessage}"></div>
+
+                <!-- Escapes stored text when displaying part information. -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Part ID</dt>
+                            <dd class="col-sm-8" th:text="${part.partId}"></dd>
+
+                            <dt class="col-sm-4">Part Name</dt>
+                            <dd class="col-sm-8" th:text="${part.partName}"></dd>
+
+                            <dt class="col-sm-4">Category</dt>
+                            <dd class="col-sm-8" th:text="${part.category}"></dd>
+
+                            <dt class="col-sm-4">Manufacturer</dt>
+                            <dd class="col-sm-8"
+                                th:text="${part.manufacturer}"></dd>
+
+                            <dt class="col-sm-4">Model</dt>
+                            <dd class="col-sm-8" th:text="${part.model}"></dd>
+
+                            <dt class="col-sm-4">Quantity</dt>
+                            <dd class="col-sm-8" th:text="${part.quantity}"></dd>
+
+                            <dt class="col-sm-4">Unit Cost (USD)</dt>
+                            <dd class="col-sm-8"
+                                th:text="${#numbers.formatDecimal(
+                                    part.unitCost, 1, 2)}"></dd>
+
+                            <dt class="col-sm-4">Storage Location</dt>
+                            <dd class="col-sm-8"
+                                th:text="${part.storageLocation}"></dd>
+
+                            <dt class="col-sm-4">Description</dt>
+                            <dd class="col-sm-8 text-break"
+                                th:text="${#strings.isEmpty(part.description)
+                                    ? 'No description provided.'
+                                    : part.description}"></dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-3 mt-4">
+                    <a class="btn btn-accent"
+                       th:href="@{/parts/{id}/edit(id=${part.partId})}">
+                        Edit Part
+                    </a>
+                    <a class="btn btn-outline-danger"
+                       th:href="@{/parts/{id}/delete(id=${part.partId})}">
+                        Delete Part
+                    </a>
+                    <a class="btn btn-outline-secondary"
+                       th:href="@{/inventory}">
+                        Return to Inventory
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
