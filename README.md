@@ -61,23 +61,28 @@ The course project is a computer parts inventory application based on my work in
 | 3 | Service interfaces, dependency injection, validated part creation, and updated design | [Milestone 3](milestones/milestone3/README.md) |
 | 4 | MySQL persistence for registration, login, and part creation using Spring JDBC | [Milestone 4](milestones/milestone4/README.md) |
 | 5 | Inventory display, part details, validated updates, deletion, and test documentation | [Milestone 5](milestones/milestone5/README.md) |
+| 6 | Spring Security, database-backed authentication, protected pages, and regression testing | [Milestone 6](milestones/milestone6/README.md) |
 
-### Latest Update: Milestone 5
+### Latest Update: Milestone 6
 
-The application now lists saved parts and displays individual component details. Users can edit validated part information and delete records through a confirmation page.
+The application now uses Spring Security for database-backed form authentication, logout, and centralized access control.
 
-Spring-managed business services use a DAO interface backed by Spring JDBC. The new pages retain the existing Thymeleaf layout and application styling.
+Login and registration remain public. All other application pages, including Home and Add Part, require authentication. Unauthenticated requests to protected pages redirect to login.
 
-Testing covered successful updates, rejected negative values, cancellation, deletion, missing records, logged-out access to the new workflows, and restart persistence.
+The password encoder preserves the existing PBKDF2 credential format. Existing accounts and newly registered accounts both authenticated successfully after the refactor.
 
-Maven completed with one application-context test and no failures or errors. The executable JAR started successfully and displayed the saved inventory.
+Navigation and greetings now use the Spring Security principal. Manual currentUser session checks and the obsolete login/session models were removed. CSRF protection remains enabled for form submissions.
 
-The updated report includes design diagrams, service contracts, a test plan, screenshots, and the video demonstration. Spring Security integration is planned for Milestone 6.
+Testing covered authentication, protected routes, registration, logout, and all 20 adapted Milestone 5 regression cases. Inventory changes persisted after restart.
 
-- [Milestone Overview](milestones/milestone5/README.md)
-- [Analysis and Planning](milestones/milestone5/analysisPlanning.md)
-- [Design and Setup](milestones/milestone5/design.md)
-- [Test Plan](milestones/milestone5/testPlan.md)
-- [Testing and Screenshots](milestones/milestone5/test.md)
-- [Video Demonstration](https://youtu.be/6aJvDrHsrDI)
+Maven completed with one application-context test, zero failures, and zero errors. The executable JAR started and displayed the saved inventory after its database environment variable was configured.
+
+The report includes updated diagrams, service contracts, configuration instructions, a test plan, 19 screenshots, and the technical and functional demonstration. Total reported effort was 10 hours.
+
+- [Milestone Overview](milestones/milestone6/README.md)
+- [Analysis and Planning](milestones/milestone6/analysisPlanning.md)
+- [Design and Setup](milestones/milestone6/design.md)
+- [Test Plan](milestones/milestone6/testPlan.md)
+- [Testing and Screenshots](milestones/milestone6/test.md)
+- [Video Demonstration](https://youtu.be/QZNVNUzUlr8)
 - [Database Script](milestones/milestone4/database/schema.sql)

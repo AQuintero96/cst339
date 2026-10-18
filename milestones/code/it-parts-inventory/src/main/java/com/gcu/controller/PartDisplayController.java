@@ -2,9 +2,6 @@ package com.gcu.controller;
 
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -19,7 +16,8 @@ import com.gcu.business.PartServiceInterface;
 import com.gcu.model.PartModel;
 
 /**
- * Displays the saved details of an individual inventory part.
+ * Displays individual inventory parts.
+ * Spring Security protects all routes before controller execution.
  */
 @Controller
 @RequestMapping("/parts")
@@ -32,6 +30,7 @@ public class PartDisplayController {
 
     /**
      * Receives the inventory business service.
+     *
      * @param partService part retrieval service
      */
     public PartDisplayController(PartServiceInterface partService) {
@@ -40,23 +39,17 @@ public class PartDisplayController {
 
     /**
      * Retrieves a part and handles missing records or database failures.
+     *
      * @param id requested identifier
-     * @param request current request
      * @param model view attributes
      * @param redirectAttributes messages for inventory
-     * @return details template or redirect
+     * @return details template or inventory redirect
      */
     @GetMapping("/{id}")
     public String displayPart(
             @PathVariable("id") Long id,
-            HttpServletRequest request,
             Model model,
             RedirectAttributes redirectAttributes) {
-
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("currentUser") == null) {
-            return "redirect:/login";
-        }
 
         try {
             Optional<PartModel> part = partService.getPartById(id);
@@ -71,8 +64,10 @@ public class PartDisplayController {
             model.addAttribute("part", part.get());
             return "part-details";
         } catch (DataAccessException exception) {
+            // Logs the failure type without exposing connection details.
             LOGGER.error("Part retrieval failed: {}",
                     exception.getClass().getSimpleName());
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
                     "Unable to load the part. Please try again.");

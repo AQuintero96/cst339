@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -28,6 +26,7 @@ import com.gcu.model.PartModel;
 
 /**
  * Handles validated updates and explicit deletion confirmation.
+ * Spring Security checks authentication and protects POST requests with CSRF.
  */
 @Controller
 @RequestMapping("/parts")
@@ -40,6 +39,7 @@ public class PartMaintenanceController {
 
     /**
      * Receives the inventory business service.
+     *
      * @param partService part maintenance service
      */
     public PartMaintenanceController(PartServiceInterface partService) {
@@ -48,6 +48,7 @@ public class PartMaintenanceController {
 
     /**
      * Prevents form submissions from changing system-managed identifiers.
+     *
      * @param binder form binder
      */
     @InitBinder("partModel")
@@ -59,6 +60,7 @@ public class PartMaintenanceController {
 
     /**
      * Supplies the permitted categories.
+     *
      * @return category choices
      */
     @ModelAttribute("categories")
@@ -70,22 +72,17 @@ public class PartMaintenanceController {
 
     /**
      * Displays an edit form populated from the database.
+     *
      * @param id requested part identifier
-     * @param request current request
      * @param model view attributes
      * @param redirectAttributes redirect messages
-     * @return edit page or redirect
+     * @return edit page or inventory redirect
      */
     @GetMapping("/{id}/edit")
     public String displayEdit(
             @PathVariable("id") Long id,
-            HttpServletRequest request,
             Model model,
             RedirectAttributes redirectAttributes) {
-
-        if (!isLoggedIn(request)) {
-            return "redirect:/login";
-        }
 
         try {
             Optional<PartModel> part = partService.getPartById(id);
@@ -105,26 +102,21 @@ public class PartMaintenanceController {
 
     /**
      * Validates and saves edited values.
+     *
      * @param id identifier from the route
      * @param partModel submitted values
      * @param bindingResult validation results
-     * @param request current request
      * @param model view attributes
      * @param redirectAttributes redirect messages
-     * @return edit page or redirect
+     * @return edit page or part details redirect
      */
     @PostMapping("/{id}/edit")
     public String updatePart(
             @PathVariable("id") Long id,
             @Valid @ModelAttribute("partModel") PartModel partModel,
             BindingResult bindingResult,
-            HttpServletRequest request,
             Model model,
             RedirectAttributes redirectAttributes) {
-
-        if (!isLoggedIn(request)) {
-            return "redirect:/login";
-        }
 
         model.addAttribute("title", "Edit Part");
         model.addAttribute("partId", id);
@@ -134,6 +126,7 @@ public class PartMaintenanceController {
         }
 
         try {
+            // The route supplies the identifier, not the submitted form.
             if (!partService.updatePart(id, partModel)) {
                 return missingPart(redirectAttributes);
             }
@@ -154,22 +147,17 @@ public class PartMaintenanceController {
 
     /**
      * Displays a confirmation page without deleting anything.
+     *
      * @param id requested identifier
-     * @param request current request
      * @param model view attributes
      * @param redirectAttributes redirect messages
-     * @return confirmation page or redirect
+     * @return confirmation page or inventory redirect
      */
     @GetMapping("/{id}/delete")
     public String displayDelete(
             @PathVariable("id") Long id,
-            HttpServletRequest request,
             Model model,
             RedirectAttributes redirectAttributes) {
-
-        if (!isLoggedIn(request)) {
-            return "redirect:/login";
-        }
 
         try {
             Optional<PartModel> part = partService.getPartById(id);
@@ -188,20 +176,15 @@ public class PartMaintenanceController {
 
     /**
      * Deletes a part only after the confirmation form is submitted.
+     *
      * @param id requested identifier
-     * @param request current request
      * @param redirectAttributes redirect messages
      * @return inventory redirect
      */
     @PostMapping("/{id}/delete")
     public String deletePart(
             @PathVariable("id") Long id,
-            HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
-
-        if (!isLoggedIn(request)) {
-            return "redirect:/login";
-        }
 
         try {
             if (!partService.deletePart(id)) {
@@ -217,18 +200,8 @@ public class PartMaintenanceController {
     }
 
     /**
-     * Checks the existing login session without creating a new one.
-     * @param request current request
-     * @return whether the session contains an authenticated user
-     */
-    private boolean isLoggedIn(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        return session != null
-                && session.getAttribute("currentUser") != null;
-    }
-
-    /**
      * Reports a missing or previously deleted record.
+     *
      * @param redirectAttributes redirect messages
      * @return inventory redirect
      */
@@ -240,6 +213,7 @@ public class PartMaintenanceController {
 
     /**
      * Reports database failures without exposing connection details.
+     *
      * @param exception database failure
      * @param redirectAttributes redirect messages
      * @return inventory redirect
@@ -247,8 +221,10 @@ public class PartMaintenanceController {
     private String databaseFailure(
             DataAccessException exception,
             RedirectAttributes redirectAttributes) {
+
         LOGGER.error("Part maintenance failed: {}",
                 exception.getClass().getSimpleName());
+
         redirectAttributes.addFlashAttribute(
                 "errorMessage",
                 "Unable to complete the request. Check the inventory "

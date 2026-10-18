@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/defaultTemplate}">
 <head>
@@ -13,19 +14,20 @@
         <p class="eyebrow">Computer components</p>
         <h1 id="inventory-heading">Parts Inventory</h1>
 
-        <p class="text-secondary"
-           th:if="${session.currentUser != null}"
-           th:text="${'Welcome, ' + session.currentUser.firstName + '.'}">
-            Welcome.
+        <!-- Uses the authenticated account's first name. -->
+        <p class="text-secondary" sec:authorize="isAuthenticated()">
+            Welcome, <span sec:authentication="principal.firstName">User</span>.
         </p>
 
         <!-- Displays messages carried through redirects. -->
         <div th:if="${successMessage != null}"
-             class="alert alert-success" role="status"
+             class="alert alert-success"
+             role="status"
              th:text="${successMessage}"></div>
 
         <div th:if="${errorMessage != null}"
-             class="alert alert-danger" role="alert"
+             class="alert alert-danger"
+             role="alert"
              th:text="${errorMessage}"></div>
 
         <div class="card border-0 shadow-sm mt-4">
@@ -83,7 +85,8 @@
                     </table>
                 </div>
 
-                <a th:if="${loadFailed}" class="btn btn-outline-secondary"
+                <a th:if="${loadFailed}"
+                   class="btn btn-outline-secondary"
                    th:href="@{/inventory}">Try Again</a>
             </div>
         </div>

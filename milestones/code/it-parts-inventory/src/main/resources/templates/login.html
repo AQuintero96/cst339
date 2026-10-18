@@ -8,99 +8,85 @@
     <title>Log In | IT Parts Inventory Manager</title>
 </head>
 <body>
+<div layout:fragment="content">
+    <section class="container py-5" aria-labelledby="login-heading">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
 
-    <div layout:fragment="content">
-        <section class="container py-5" aria-labelledby="login-heading">
-            <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-6">
+                <p class="eyebrow">Welcome back</p>
+                <h1 id="login-heading">Log In</h1>
+                <p class="text-secondary mb-4">
+                    Enter your username and password to continue.
+                </p>
 
-                    <p class="eyebrow">Welcome back</p>
-                    <h1 id="login-heading">Log In</h1>
-                    <p class="text-secondary mb-4">
-                        Enter your username and password to continue.
-                    </p>
+                <!-- Displays the registration confirmation. -->
+                <div th:if="${successMessage != null}"
+                     class="alert alert-success"
+                     role="status"
+                     th:text="${successMessage}">
+                    Confirmation message
+                </div>
 
-                    <!-- Displays registration and logout confirmations. -->
-                    <div th:if="${successMessage != null}"
-                         class="alert alert-success"
-                         role="status"
-                         th:text="${successMessage}">
-                        Confirmation message
-                    </div>
+                <!-- Spring Security redirects here after failed authentication. -->
+                <div th:if="${param.error != null}"
+                     class="alert alert-danger"
+                     role="alert">
+                    Login was unsuccessful. Check your username and password
+                    and try again.
+                </div>
 
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body p-4 p-md-5">
-                            <form th:action="@{/login}"
-                                  th:object="${loginModel}"
-                                  method="post"
-                                  novalidate>
+                <!-- Spring Security redirects here after completing logout. -->
+                <div th:if="${param.logout != null}"
+                     class="alert alert-success"
+                     role="status">
+                    You have been logged out.
+                </div>
 
-                                <!-- Displays errors involving the credential pair. -->
-                                <div th:if="${#fields.hasGlobalErrors()}"
-                                     class="alert alert-danger"
-                                     role="alert">
-                                    <p th:each="error : ${#fields.globalErrors()}"
-                                       th:text="${error}"
-                                       class="mb-0">
-                                        Login error
-                                    </p>
-                                </div>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
 
-                                <div class="mb-3">
-                                    <label for="username" class="form-label">
-                                        Username
-                                    </label>
-                                    <input type="text"
-                                           id="username"
-                                           class="form-control"
-                                           th:field="*{username}"
-                                           th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''"
-                                           autocomplete="username"
-                                           aria-describedby="usernameError"
-                                           required>
-                                    <div id="usernameError"
-                                         class="invalid-feedback"
-                                         th:errors="*{username}">
-                                        Username error
-                                    </div>
-                                </div>
+                        <!-- Thymeleaf includes the CSRF token in this POST form. -->
+                        <form th:action="@{/login}" method="post">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">
+                                    Username
+                                </label>
+                                <input type="text"
+                                       id="username"
+                                       name="username"
+                                       class="form-control"
+                                       autocomplete="username"
+                                       required>
+                            </div>
 
-                                <!-- Does not repopulate the password after a failed login. -->
-                                <div class="mb-4">
-                                    <label for="password" class="form-label">
-                                        Password
-                                    </label>
-                                    <input type="password"
-                                           id="password"
-                                           name="password"
-                                           class="form-control"
-                                           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
-                                           autocomplete="current-password"
-                                           aria-describedby="passwordError"
-                                           required>
-                                    <div id="passwordError"
-                                         class="invalid-feedback"
-                                         th:errors="*{password}">
-                                        Password error
-                                    </div>
-                                </div>
+                            <!-- Never repopulates the submitted password. -->
+                            <div class="mb-4">
+                                <label for="password" class="form-label">
+                                    Password
+                                </label>
+                                <input type="password"
+                                       id="password"
+                                       name="password"
+                                       class="form-control"
+                                       autocomplete="current-password"
+                                       required>
+                            </div>
 
-                                <button type="submit"
-                                        class="btn btn-accent w-100">
-                                    Log In
-                                </button>
+                            <button type="submit"
+                                    class="btn btn-accent w-100">
+                                Log In
+                            </button>
 
-                                <p class="mt-4 mb-0">
-                                    Need an account?
-                                    <a th:href="@{/register}">Register here</a>.
-                                </p>
-                            </form>
-                        </div>
+                            <p class="mt-4 mb-0">
+                                Need an account?
+                                <a th:href="@{/register}">Register here</a>.
+                            </p>
+                        </form>
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
-
+        </div>
+    </section>
+</div>
 </body>
 </html>

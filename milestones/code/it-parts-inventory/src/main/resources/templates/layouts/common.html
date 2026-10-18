@@ -1,94 +1,92 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Shared Page Fragments</title>
 </head>
 <body>
 
-    <!-- Shares application branding and navigation across all pages. -->
-    <header th:fragment="header" class="site-header">
-        <nav class="navbar navbar-expand-md navbar-dark"
-             aria-label="Main navigation">
-            <div class="container">
-                <a class="navbar-brand" th:href="@{/}">
-                    <span class="brand-mark" aria-hidden="true">IT</span>
-                    Parts Inventory
-                </a>
+<!-- Shares application branding and navigation across all pages. -->
+<header th:fragment="header" class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark"
+         aria-label="Main navigation">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">
+                <span class="brand-mark" aria-hidden="true">IT</span>
+                Parts Inventory
+            </a>
 
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#mainNavigation"
-                        aria-controls="mainNavigation"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#mainNavigation"
+                    aria-controls="mainNavigation"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <div class="collapse navbar-collapse" id="mainNavigation">
-                    <ul class="navbar-nav ms-auto align-items-md-center gap-md-2">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/}">Home</a>
-                        </li>
+            <div class="collapse navbar-collapse" id="mainNavigation">
+                <ul class="navbar-nav ms-auto align-items-md-center gap-md-2">
 
-                        <!-- Shows account entry links for visitors. -->
-                        <li class="nav-item"
-                            th:if="${session.currentUser == null}">
-                            <a class="nav-link" th:href="@{/login}">Login</a>
-                        </li>
+                    <!-- The home page now requires authentication. -->
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" th:href="@{/}">Home</a>
+                    </li>
 
-                        <li class="nav-item"
-                            th:if="${session.currentUser == null}">
-                            <a class="btn btn-accent"
-                               th:href="@{/register}">Register</a>
-                        </li>
+                    <!-- Shows account entry links for visitors. -->
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{/login}">Login</a>
+                    </li>
 
-                        <!-- Shows inventory actions during a login session. -->
-                        <li class="nav-item"
-                            th:if="${session.currentUser != null}">
-                            <a class="nav-link"
-                               th:href="@{/inventory}">Inventory</a>
-                        </li>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="btn btn-accent"
+                           th:href="@{/register}">Register</a>
+                    </li>
 
-                        <li class="nav-item"
-                            th:if="${session.currentUser != null}">
-                            <a class="nav-link"
-                               th:href="@{/parts/new}">Add Part</a>
-                        </li>
+                    <!-- Reads authentication state from Spring Security. -->
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link"
+                           th:href="@{/inventory}">Inventory</a>
+                    </li>
 
-                        <li class="nav-item"
-                            th:if="${session.currentUser != null}">
-                            <span class="navbar-text text-light"
-                                  th:text="${'Hello, ' + session.currentUser.firstName}">
-                                Hello
-                            </span>
-                        </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link"
+                           th:href="@{/parts/new}">Add Part</a>
+                    </li>
 
-                        <li class="nav-item"
-                            th:if="${session.currentUser != null}">
-                            <form th:action="@{/logout}"
-                                  method="post"
-                                  class="m-0">
-                                <button type="submit"
-                                        class="btn btn-outline-light">
-                                    Log Out
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <span class="navbar-text text-light">
+                            Hello, <span sec:authentication="principal.firstName">User</span>
+                        </span>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <!-- Logout uses POST with an automatically included CSRF token. -->
+                        <form th:action="@{/logout}"
+                              method="post"
+                              class="m-0">
+                            <button type="submit"
+                                    class="btn btn-outline-light">
+                                Log Out
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             </div>
-        </nav>
-    </header>
-
-    <!-- Identifies the project and its sole developer. -->
-    <footer th:fragment="footer" class="site-footer">
-        <div class="container footer-content">
-            <span>IT Parts Inventory Manager</span>
-            <span>Alex Quintero | CST-339 | 2026</span>
         </div>
-    </footer>
+    </nav>
+</header>
+
+<!-- Identifies the project and its sole developer. -->
+<footer th:fragment="footer" class="site-footer">
+    <div class="container footer-content">
+        <span>IT Parts Inventory Manager</span>
+        <span>Alex Quintero | CST-339 | 2026</span>
+    </div>
+</footer>
 
 </body>
 </html>
