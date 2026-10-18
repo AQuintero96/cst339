@@ -13,145 +13,49 @@
 
 ## Part 1: In-Memory Authentication
 
-### Home Page
+Click a screenshot to view the full image.
 
-The public home page provides access to the login page.
-
-![Part 1 home page](screenshots/01-part1-home.png)
-
-### Invalid Login
-
-The login page displays an error after invalid credentials are submitted.
-
-![Part 1 invalid login](screenshots/02-part1-invalid-login.png)
-
-### Authenticated Orders
-
-The orders page identifies the signed-in test account and displays six orders.
-
-![Part 1 orders](screenshots/03-part1-orders.png)
-
-### Public JSON Endpoint
-
-The JSON endpoint returns the stored orders.
-
-![Part 1 JSON response](screenshots/04-part1-public-json.png)
-
-### Public XML Endpoint
-
-The XML endpoint returns the stored orders.
-
-![Part 1 XML response](screenshots/05-part1-public-xml.png)
-
-### Maven Build
-
-The corrected database configuration allowed the Maven build to succeed.
-
-![Part 1 build success](screenshots/06-part1-build-success.png)
-
-### Executable JAR Startup
-
-The packaged application was launched outside Eclipse.
-
-![Part 1 JAR startup](screenshots/07-part1-jar-startup.png)
-
-### Executable JAR Orders
-
-The running JAR served the authenticated orders page.
-
-![Part 1 JAR orders](screenshots/08-part1-jar-orders.png)
+| Test | Observed Result | Screenshot |
+| --- | --- | --- |
+| 1. Home page | The public home page displayed a link to log in. | [<img src="screenshots/01-part1-home.png" alt="Part 1 home page" width="220">](screenshots/01-part1-home.png) |
+| 2. Invalid login | The login page displayed an invalid username or password message. | [<img src="screenshots/02-part1-invalid-login.png" alt="Part 1 invalid login" width="220">](screenshots/02-part1-invalid-login.png) |
+| 3. Authenticated orders | The orders page identified the signed-in test account and displayed six orders. | [<img src="screenshots/03-part1-orders.png" alt="Part 1 authenticated orders" width="220">](screenshots/03-part1-orders.png) |
+| 4. JSON response | The JSON endpoint returned the six stored orders, including their document identifiers. | [<img src="screenshots/04-part1-public-json.png" alt="Part 1 JSON response" width="220">](screenshots/04-part1-public-json.png) |
+| 5. XML response | The XML endpoint returned the six stored orders. | [<img src="screenshots/05-part1-public-xml.png" alt="Part 1 XML response" width="220">](screenshots/05-part1-public-xml.png) |
+| 6. Maven build | The Maven build succeeded after the MongoDB connection configuration was corrected. | [<img src="screenshots/06-part1-build-success.png" alt="Part 1 Maven build success" width="220">](screenshots/06-part1-build-success.png) |
+| 7. Executable JAR startup | The packaged application was launched outside Eclipse. | [<img src="screenshots/07-part1-jar-startup.png" alt="Part 1 executable JAR startup" width="220">](screenshots/07-part1-jar-startup.png) |
+| 8. Executable JAR orders | The running JAR served the authenticated orders page with six orders. | [<img src="screenshots/08-part1-jar-orders.png" alt="Part 1 executable JAR orders" width="220">](screenshots/08-part1-jar-orders.png) |
 
 ## Part 2: MongoDB Authentication
 
-### Stored Application Account
-
-The users collection contains the application account and its BCrypt password hash.
-
-![MongoDB application account](screenshots/09-part2-stored-user.png)
-
-### Invalid Login
-
-Invalid credentials produce a login error.
-
-![Part 2 invalid login](screenshots/10-part2-invalid-login.png)
-
-### Authenticated Orders
-
-Successful authentication displays the orders page under the test account.
-
-![Part 2 orders](screenshots/11-part2-orders.png)
-
-### Public JSON Endpoint
-
-The JSON endpoint returns the six stored orders.
-
-![Part 2 JSON response](screenshots/12-part2-public-json.png)
-
-### Public XML Endpoint
-
-The XML endpoint returns the six stored orders.
-
-![Part 2 XML response](screenshots/13-part2-public-xml.png)
-
-### Maven Build
-
-Maven reports BUILD SUCCESS with one test, zero failures, and zero errors.
-
-![Part 2 build success](screenshots/14-part2-build-success.png)
-
-### Executable JAR Startup
-
-The console reports that Topic62Application started on port 8080.
-
-![Part 2 JAR startup](screenshots/15-part2-jar-startup.png)
-
-### Executable JAR Orders
-
-The packaged application displays the orders after login.
-
-![Part 2 JAR orders](screenshots/16-part2-jar-orders.png)
+| Test | Observed Result | Screenshot |
+| --- | --- | --- |
+| 9. Stored application account | The users collection contained the test account with a BCrypt password hash. | [<img src="screenshots/09-part2-stored-user.png" alt="MongoDB application account" width="220">](screenshots/09-part2-stored-user.png) |
+| 10. Invalid login | Invalid credentials produced a login error. | [<img src="screenshots/10-part2-invalid-login.png" alt="Part 2 invalid login" width="220">](screenshots/10-part2-invalid-login.png) |
+| 11. Authenticated orders | Successful authentication displayed six orders under the test account. | [<img src="screenshots/11-part2-orders.png" alt="Part 2 authenticated orders" width="220">](screenshots/11-part2-orders.png) |
+| 12. JSON response | The JSON endpoint returned the six stored orders. | [<img src="screenshots/12-part2-public-json.png" alt="Part 2 JSON response" width="220">](screenshots/12-part2-public-json.png) |
+| 13. XML response | The XML endpoint returned the six stored orders. | [<img src="screenshots/13-part2-public-xml.png" alt="Part 2 XML response" width="220">](screenshots/13-part2-public-xml.png) |
+| 14. Maven build | Maven reported BUILD SUCCESS with one test, zero failures, and zero errors. | [<img src="screenshots/14-part2-build-success.png" alt="Part 2 Maven build success" width="220">](screenshots/14-part2-build-success.png) |
+| 15. Executable JAR startup | The console reported that Topic62Application started on port 8080. | [<img src="screenshots/15-part2-jar-startup.png" alt="Part 2 executable JAR startup" width="220">](screenshots/15-part2-jar-startup.png) |
+| 16. Executable JAR orders | The packaged application displayed six orders after login. | [<img src="screenshots/16-part2-jar-orders.png" alt="Part 2 executable JAR orders" width="220">](screenshots/16-part2-jar-orders.png) |
 
 ## Part 3: Protected REST Endpoints
 
-The replacement screenshots show Basic Auth selected in Postman. Password values are masked.
+The screenshots show Basic Auth selected in Postman. Password values are masked.
 
-### JSON with Valid Credentials
-
-The JSON request returns HTTP 200 OK and order data.
-
-![Authorized JSON request](screenshots/17-part3-json-authorized.png)
-
-### JSON with Invalid Credentials
-
-The JSON request returns HTTP 401 Unauthorized.
-
-![Unauthorized JSON request](screenshots/18-part3-json-unauthorized.png)
-
-### XML with Valid Credentials
-
-The XML request returns HTTP 200 OK and order data.
-
-![Authorized XML request](screenshots/19-part3-xml-authorized.png)
-
-### XML with Invalid Credentials
-
-The XML request returns HTTP 401 Unauthorized. The error body is displayed as JSON.
-
-![Unauthorized XML request](screenshots/20-part3-xml-unauthorized.png)
+| Test | Observed Result | Screenshot |
+| --- | --- | --- |
+| 17. JSON with valid credentials | The request to /service/getjson returned HTTP 200 OK and order data in JSON format. | [<img src="screenshots/17-part3-json-authorized.png" alt="JSON request with valid credentials" width="220">](screenshots/17-part3-json-authorized.png) |
+| 18. JSON with invalid credentials | The request to /service/getjson returned HTTP 401 Unauthorized. | [<img src="screenshots/18-part3-json-unauthorized.png" alt="JSON request with invalid credentials" width="220">](screenshots/18-part3-json-unauthorized.png) |
+| 19. XML with valid credentials | The request to /service/getxml returned HTTP 200 OK and order data in XML format. | [<img src="screenshots/19-part3-xml-authorized.png" alt="XML request with valid credentials" width="220">](screenshots/19-part3-xml-authorized.png) |
+| 20. XML with invalid credentials | The request to /service/getxml returned HTTP 401 Unauthorized. The error body was displayed as JSON. | [<img src="screenshots/20-part3-xml-unauthorized.png" alt="XML request with invalid credentials" width="220">](screenshots/20-part3-xml-unauthorized.png) |
 
 ## Part 4: GitHub OAuth2
 
-### GitHub Sign-In
-
-GitHub displays the sign-in page for CST-339 Activity.
-
-![GitHub login](screenshots/21-part4-github-login.png)
-
-### Authenticated Response
-
-After authentication, the browser returns to /service/test. The response identifies AQuintero96 as the authenticated GitHub user.
-
-![GitHub authenticated response](screenshots/22-part4-oauth-response.png)
+| Test | Observed Result | Screenshot |
+| --- | --- | --- |
+| 21. GitHub sign-in | GitHub displayed the sign-in page for CST-339 Activity. | [<img src="screenshots/21-part4-github-login.png" alt="GitHub sign-in page" width="220">](screenshots/21-part4-github-login.png) |
+| 22. Authenticated response | The browser returned to /service/test and displayed a greeting identifying AQuintero96 as the authenticated GitHub user. | [<img src="screenshots/22-part4-oauth-response.png" alt="Successful GitHub authentication response" width="220">](screenshots/22-part4-oauth-response.png) |
 
 ## Testing Boundaries
 
