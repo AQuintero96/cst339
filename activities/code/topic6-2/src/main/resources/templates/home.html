@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultTemplate}">
+<head>
+    <meta charset="UTF-8">
+    <title>My Home</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- The home page is available without authentication. -->
+    <p>Welcome to the secured CST-339 orders application.</p>
+
+    <a sec:authorize="isAnonymous()"
+       th:href="@{/login}" class="btn btn-primary">
+        Log In
+    </a>
+
+    <a sec:authorize="isAuthenticated()"
+       th:href="@{/orders/display}" class="btn btn-primary">
+        View Orders
+    </a>
+</div>
+</body>
+</html>

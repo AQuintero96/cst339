@@ -8,7 +8,7 @@ Activities and milestones are organized separately. Related assignments build on
 
 ### Spring Boot Coursework
 
-The activities introduce the tools and Spring features used throughout the course. They cover application setup, web forms, business services, REST endpoints, and relational and document database access.
+The activities introduce the tools and Spring features used throughout the course. They cover application setup, web forms, business services, REST endpoints, relational and document database access, and authentication.
 
 [View Activity Source Code](activities/code/)
 
@@ -21,22 +21,28 @@ The activities introduce the tools and Spring features used throughout the cours
 | 3 | Business services, dependency injection, bean scopes, and REST endpoints | [Activity 3](activities/activity3/README.md) |
 | 4 | MySQL, Spring JDBC, Spring Data JDBC, and custom SQL queries | [Activity 4](activities/activity4/README.md) |
 | 5 | MongoDB Atlas, document persistence, JSON/XML responses, and identifier queries | [Activity 5](activities/activity5/README.md) |
+| 6 | Form login, MongoDB accounts, HTTP Basic authentication, and GitHub OAuth2 | [Activity 6](activities/activity6/README.md) |
 
-### Latest Update: Activity 5
+### Latest Update: Activity 6
 
-The orders application now uses Spring Data MongoDB to access documents stored in MongoDB Atlas. The application displays saved orders through Thymeleaf and provides JSON and XML responses.
+Four separate projects demonstrate application security with Spring Security.
 
-A dedicated verification profile saved an additional order and read it back successfully. A derived repository query retrieves an order by its document identifier, and an absent identifier produces a not-found response.
+Part 1 uses an in-memory account for form login. Part 2 retrieves application accounts from MongoDB and verifies BCrypt password hashes. Both projects display orders after login and retain public JSON and XML endpoints.
 
-The Maven build completed with one test, zero failures, and zero errors. The executable JAR ran from PowerShell and displayed all six stored orders.
+Part 3 protects the REST endpoints using HTTP Basic authentication. Postman tests show HTTP 200 responses for valid credentials and HTTP 401 responses for invalid credentials.
 
-The report is divided into shorter pages for planning, design, and testing. Screenshots appear as clickable thumbnails.
+Part 4 uses GitHub OAuth2 login in a separate application. After GitHub authentication, the application displays a greeting with the authenticated username.
 
-- [Activity Overview](activities/activity5/README.md)
-- [Analysis and Planning](activities/activity5/analysisPlanning.md)
-- [Design and Setup](activities/activity5/design.md)
-- [Testing and Screenshots](activities/activity5/test.md)
-- [Activity 5 Source Code](activities/code/topic5-1/)
+Parts 1 and 2 were also packaged and run as executable JAR files. The report includes 22 screenshots documenting the four parts.
+
+- [Activity Overview](activities/activity6/README.md)
+- [Analysis and Planning](activities/activity6/analysisPlanning.md)
+- [Design and Setup](activities/activity6/design.md)
+- [Testing and Screenshots](activities/activity6/test.md)
+- [Part 1 Source Code](activities/code/topic6-1/)
+- [Part 2 Source Code](activities/code/topic6-2/)
+- [Part 3 Source Code](activities/code/topic6-3/)
+- [Part 4 Source Code](activities/code/topic6-4/)
 
 ## Milestones
 

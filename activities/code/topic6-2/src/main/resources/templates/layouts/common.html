@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Common Page Fragments</title>
+</head>
+<body>
+    <!-- Shares the heading and authentication-aware navigation. -->
+    <div th:fragment="header">
+        <h1 class="mt-4">
+            Welcome to my CST-339 Spring Boot Activity Application
+        </h1>
+
+        <nav class="navbar navbar-light bg-light justify-content-center mb-3"
+             aria-label="Main navigation">
+            <a class="btn btn-outline-primary mx-1"
+               th:href="@{/}">Home</a>
+
+            <a sec:authorize="isAnonymous()"
+               class="btn btn-outline-primary mx-1"
+               th:href="@{/login}">Log In</a>
+
+            <a sec:authorize="isAuthenticated()"
+               class="btn btn-outline-primary mx-1"
+               th:href="@{/orders/display}">Orders</a>
+
+            <span sec:authorize="isAuthenticated()" class="mx-2">
+                Signed in as <strong sec:authentication="name">user</strong>
+            </span>
+
+            <form sec:authorize="isAuthenticated()"
+                  th:action="@{/logout}" method="post" class="m-0">
+                <button type="submit" class="btn btn-outline-danger mx-1">
+                    Log Out
+                </button>
+            </form>
+        </nav>
+
+        <h2 th:text="${title}">Page Title</h2>
+
+        <img th:src="@{/images/gcu-logo.png}"
+             alt="Grand Canyon University logo"
+             class="img-fluid my-3"
+             style="max-width: 220px;">
+    </div>
+
+    <!-- Retains the activity's shared footer. -->
+    <div th:fragment="footer"
+         class="fixed-bottom bg-light text-center py-3">
+        <h5 class="mb-0">Copyright 2020 Grand Canyon University</h5>
+    </div>
+</body>
+</html>
